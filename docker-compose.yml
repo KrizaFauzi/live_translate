@@ -3,7 +3,7 @@ services:
   backend:
     build: ./backend
     ports:
-      - "8000:8000"
+      - "8008:8000"
     volumes:
       - ./backend:/app
       - model_cache:/root/.cache/huggingface
@@ -13,7 +13,7 @@ services:
     volumes:
       - ./frontend:/app
     ports:
-      - "5173:5173"
-    command: npm run dev -- --host
+      - "3005:3005"
+    command: npm run dev -- --host --port 3005
 volumes:
   model_cache:
