@@ -40,7 +40,7 @@ export default function App() {
 
     try {
       // Step 1: Transcribe
-      const res1 = await fetch("http://localhost:8000/api/transcribe", {
+      const res1 = await fetch("/api/transcribe", {
         method: "POST",
         body: formData
       });
@@ -53,7 +53,7 @@ export default function App() {
       const srcLang = mode === "id-en" ? "id" : "en";
       const tgtLang = mode === "id-en" ? "en" : "id";
       
-      const res2 = await fetch("http://localhost:8000/api/translate", {
+      const res2 = await fetch("/api/translate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: transcribed, source_lang: srcLang, target_lang: tgtLang })
