@@ -9,16 +9,36 @@ services:
     env_file:
       - .env
     depends_on:
-      - libretranslate
-      - whispercpp
+      libretranslate:
+        condition: service_healthy
+      whispercpp:
+        condition: service_healthy
   whispercpp:
     image: ghcr.io/ggml-org/whisper.cpp:main
-    command: sh -c 'test -f /models/ggml-base.bin || ./models/download-ggml-model.sh base /models; whisper-server --host 0.0.0.0 -m /models/ggml-base.bin'
+    # The image's entrypoint is already `bash -c`, so pass the whole shell
+    # script as its single argument. A list such as `sh -c <script>` makes
+    # Bash execute only `sh` (or `test`) and exit before starting the server.
+    command:
+      - >-
+        test -f /models/ggml-base.bin || ./models/download-ggml-model.sh base /models;
+        exec whisper-server --host 0.0.0.0 -m /models/ggml-base.bin
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/ >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 5m
     volumes:
       - whispercpp_models:/models
   libretranslate:
     image: libretranslate/libretranslate:latest
     command: --load-only en,id --threads 2
+    healthcheck:
+      test: ["CMD-SHELL", "./venv/bin/python scripts/healthcheck.py"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 5m
     volumes:
       - libretranslate_models:/home/libretranslate/.local
   frontend:
