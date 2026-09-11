@@ -13,7 +13,7 @@ export function Header({ className }: HeaderProps) {
           <div>
             <h1 className="text-h1 font-bold tracking-tight text-balance">Voice Translator</h1>
             <p className="text-body-sm text-[var(--fg-muted)] mt-0.5">
-              Live speech-to-text powered by Deepgram
+              Local live speech-to-text with whisper.cpp
             </p>
           </div>
           <ThemeToggle />

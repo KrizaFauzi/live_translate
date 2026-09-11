@@ -1,6 +1,6 @@
 """Cloud provider services used by the API."""
 
-from .deepgram_live import DeepgramLiveSession, LiveProviderUnavailableError
 from .libretranslate import LibreTranslateService
+from .whisper_cpp import WhisperCppService
 
-__all__ = ["DeepgramLiveSession", "LibreTranslateService", "LiveProviderUnavailableError"]
+__all__ = ["LibreTranslateService", "WhisperCppService"]

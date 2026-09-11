@@ -10,15 +10,11 @@ def test_health_endpoint():
     assert response.json() == {"status": "ok"}
 
 
-def test_live_session_requires_a_deepgram_key(monkeypatch):
-    monkeypatch.delenv("DEEPGRAM_API_KEY", raising=False)
+def test_live_session_starts_without_a_cloud_stt_key():
     from main import app
 
     with TestClient(app).websocket_connect("/api/live/session") as websocket:
         websocket.send_json({"type": "start", "sourceLanguage": "id", "targetLanguage": "en"})
-        websocket.receive_json()
         response = websocket.receive_json()
 
-    assert response["type"] == "error"
-    assert response["code"] == "live_mode_unavailable"
-    assert "DEEPGRAM_API_KEY" in response["message"]
+    assert response == {"type": "session.status", "status": "listening"}

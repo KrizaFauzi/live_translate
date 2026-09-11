@@ -10,6 +10,12 @@ services:
       - .env
     depends_on:
       - libretranslate
+      - whispercpp
+  whispercpp:
+    image: ghcr.io/ggml-org/whisper.cpp:main
+    command: sh -c 'test -f /models/ggml-base.bin || ./models/download-ggml-model.sh base /models; whisper-server --host 0.0.0.0 -m /models/ggml-base.bin'
+    volumes:
+      - whispercpp_models:/models
   libretranslate:
     image: libretranslate/libretranslate:latest
     command: --load-only en,id --threads 2
@@ -27,3 +33,4 @@ services:
 volumes:
   frontend_node_modules:
   libretranslate_models:
+  whispercpp_models:

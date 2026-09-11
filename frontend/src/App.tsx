@@ -25,7 +25,7 @@ function AppContent() {
   const handleStart = useCallback(async () => {
     const accepted = window.localStorage.getItem('live-mode-disclosure-accepted') === 'true'
     if (!accepted) {
-      const confirmed = window.confirm('Live Mode sends microphone audio to Deepgram and translates finalized text locally with LibreTranslate. Continue?')
+      const confirmed = window.confirm('Live Mode transcribes audio locally with whisper.cpp and translates finalized text locally with LibreTranslate. Continue?')
       if (!confirmed) return
       window.localStorage.setItem('live-mode-disclosure-accepted', 'true')
     }
@@ -92,7 +92,7 @@ function AppContent() {
         <p className="text-sm text-[var(--fg-muted)]" aria-live="polite">
           {live.error || liveCapture.error || (live.status === 'listening' ? 'Listening and translating live' : 'Choose the language you will speak, then start listening')}
         </p>
-        <p className="text-caption text-[var(--fg-muted)] text-center max-w-md">Deepgram transcribes audio; LibreTranslate runs locally in Docker for text translation.</p>
+        <p className="text-caption text-[var(--fg-muted)] text-center max-w-md">whisper.cpp transcribes audio locally; LibreTranslate runs locally in Docker for text translation.</p>
       </div>
     </MainLayout>
   )
