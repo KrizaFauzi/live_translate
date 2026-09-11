@@ -3,3 +3,9 @@ __pycache__/
 .pytest_cache/
 node_modules/
 dist/
+.omo/
+.opencode/
+~/
+.env
+.env.*
+!.env.example

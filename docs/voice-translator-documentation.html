@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Voice Translator — Dokumentasi Proyek</title>
+<style>
+  :root {
+    --ink: #0f172a;
+    --body: #334155;
+    --muted: #64748b;
+    --accent: #4f46e5;
+    --accent-dark: #312e81;
+    --violet: #7c3aed;
+    --line: #e2e8f0;
+    --soft: #f1f5f9;
+    --card: #f8fafc;
+    --green: #059669;
+    --amber: #d97706;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  @page { size: A4; margin: 0; }
+  html, body { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; color: var(--ink); }
+
+  .page { width: 210mm; height: 296mm; padding: 20mm 18mm; position: relative; overflow: hidden; break-after: page; background: #ffffff; display: flex; flex-direction: column; }
+  .page:last-child { break-after: auto; }
+
+  /* ---------- Cover ---------- */
+  .cover { background: linear-gradient(140deg, #1e1b4b 0%, #312e81 35%, #4f46e5 75%, #7c3aed 100%); color: #fff; justify-content: space-between; padding: 24mm 20mm; }
+  .cover .brand { display: flex; align-items: center; gap: 12px; font-size: 13pt; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; opacity: .92; }
+  .brand-dot { width: 14px; height: 14px; border-radius: 4px; background: linear-gradient(135deg, #a5b4fc, #22d3ee); }
+  .cover-main { margin-top: 10mm; }
+  .kicker { font-size: 11pt; letter-spacing: .28em; text-transform: uppercase; color: #c7d2fe; margin-bottom: 8mm; }
+  .cover h1 { font-size: 44pt; line-height: 1.04; font-weight: 800; letter-spacing: -0.02em; }
+  .cover h1 span { color: #a5b4fc; }
+  .cover .tagline { margin-top: 8mm; font-size: 13.5pt; line-height: 1.55; color: #e0e7ff; max-width: 145mm; font-weight: 300; }
+  .waveform { display: flex; align-items: flex-end; gap: 7px; height: 34mm; margin-top: 14mm; }
+  .waveform i { display: block; width: 9px; border-radius: 5px 5px 2px 2px; background: rgba(255,255,255,.28); }
+  .waveform i.hi { background: rgba(165,180,252,.85); }
+  .cover-meta { display: flex; gap: 10px; flex-wrap: wrap; border-top: 1px solid rgba(255,255,255,.25); padding-top: 7mm; }
+  .chip { font-size: 9.5pt; padding: 6px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,.4); color: #eef2ff; }
+  .doc-label { position: absolute; top: 24mm; right: 20mm; text-align: right; font-size: 9.5pt; color: #c7d2fe; line-height: 1.7; }
+
+  /* ---------- Common section styles ---------- */
+  .sec-head { display: flex; align-items: center; gap: 14px; margin-bottom: 7mm; }
+  .sec-num { min-width: 40px; height: 40px; border-radius: 12px; background: var(--accent-dark); color: #fff; font-weight: 700; font-size: 15pt; display: flex; align-items: center; justify-content: center; }
+  .sec-head h2 { font-size: 19pt; font-weight: 750; letter-spacing: -0.01em; }
+  .sec-head p { font-size: 10pt; color: var(--muted); margin-top: 2px; }
+  h3 { font-size: 12pt; font-weight: 700; margin: 7mm 0 3mm; color: var(--accent-dark); }
+  p.body, li { font-size: 10.5pt; line-height: 1.65; color: var(--body); }
+  p.body + p.body { margin-top: 2.5mm; }
+  strong { color: var(--ink); }
+
+  .footer { margin-top: auto; padding-top: 5mm; border-top: 1px solid var(--line); display: flex; justify-content: space-between; font-size: 8.5pt; color: var(--muted); }
+
+  /* metric cards */
+  .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; margin: 5mm 0 2mm; }
+  .metric { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 5mm 4mm; text-align: center; }
+  .metric b { display: block; font-size: 16pt; color: var(--accent); font-weight: 800; }
+  .metric span { font-size: 8.5pt; color: var(--muted); line-height: 1.4; display: block; margin-top: 2px; }
+
+  /* callout */
+  .callout { border-left: 4px solid var(--accent); background: #eef2ff; border-radius: 0 10px 10px 0; padding: 4mm 5mm; font-size: 10pt; line-height: 1.6; color: #3730a3; margin-top: 4mm; }
+  .callout.privacy { border-color: var(--green); background: #ecfdf5; color: #065f46; }
+
+  /* feature cards */
+  .feat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4.5mm; margin-top: 2mm; }
+  .feat { border: 1px solid var(--line); border-radius: 14px; padding: 5.5mm; background: #fff; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
+  .feat .ico { width: 34px; height: 34px; border-radius: 10px; background: #eef2ff; color: var(--accent); font-size: 16pt; display: flex; align-items: center; justify-content: center; margin-bottom: 3.5mm; }
+  .feat h4 { font-size: 11pt; margin-bottom: 2mm; }
+  .feat p { font-size: 9.5pt; line-height: 1.6; color: var(--body); }
+
+  /* architecture diagram */
+  .arch { margin-top: 4mm; }
+  .arch-row { display: flex; align-items: stretch; gap: 6mm; justify-content: center; }
+  .node { border-radius: 14px; padding: 5mm 6mm; text-align: center; min-width: 58mm; }
+  .node h5 { font-size: 11pt; margin-bottom: 1.5mm; }
+  .node small { font-size: 8.5pt; line-height: 1.5; display: block; opacity: .85; }
+  .node.fe { background: #eef2ff; border: 1.5px solid #a5b4fc; color: #3730a3; }
+  .node.be { background: #ecfdf5; border: 1.5px solid #6ee7b7; color: #065f46; }
+  .arrow-h { align-self: center; color: var(--accent); font-size: 17pt; font-weight: 700; }
+  .arrow-v { text-align: center; color: var(--accent); font-size: 15pt; font-weight: 700; margin: 2.5mm 0; }
+  .models-row { display: flex; gap: 6mm; justify-content: center; }
+  .model { background: #faf5ff; border: 1.5px dashed #d8b4fe; color: #6b21a8; border-radius: 12px; padding: 4mm 5mm; text-align: center; min-width: 52mm; }
+  .model b { font-size: 10pt; display: block; margin-bottom: 1mm; }
+  .model small { font-size: 8pt; line-height: 1.45; display: block; }
+  .vol { margin: 4mm auto 0; width: 70%; background: var(--soft); border: 1.5px solid var(--line); color: var(--muted); border-radius: 999px; padding: 3mm; text-align: center; font-size: 8.5pt; }
+
+  /* tables */
+  table { width: 100%; border-collapse: collapse; margin-top: 2mm; }
+  th { background: var(--accent-dark); color: #fff; font-size: 9.5pt; text-align: left; padding: 3mm 4mm; font-weight: 600; }
+  td { font-size: 9.5pt; padding: 3mm 4mm; border-bottom: 1px solid var(--line); color: var(--body); vertical-align: top; line-height: 1.5; }
+  tr:nth-child(even) td { background: var(--card); }
+  td b { color: var(--ink); }
+
+  /* workflow steps */
+  .steps { margin-top: 3mm; }
+  .step { display: flex; gap: 5mm; padding: 4mm 0; border-bottom: 1px dashed var(--line); }
+  .step:last-child { border-bottom: none; }
+  .step-n { min-width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; font-size: 11pt; display: flex; align-items: center; justify-content: center; }
+  .step h4 { font-size: 10.5pt; margin-bottom: 1mm; }
+  .step p { font-size: 9.5pt; line-height: 1.55; color: var(--body); }
+  .step code, p code, li code { background: #eef2ff; color: #4338ca; padding: 1px 6px; border-radius: 5px; font-family: Consolas, monospace; font-size: 8.8pt; }
+
+  /* API cards */
+  .api { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin-bottom: 5mm; }
+  .api-head { display: flex; align-items: center; gap: 10px; padding: 3.5mm 5mm; background: var(--soft); border-bottom: 1px solid var(--line); }
+  .method { font-family: Consolas, monospace; font-size: 8.5pt; font-weight: 700; color: #fff; padding: 2.5px 10px; border-radius: 6px; }
+  .m-post { background: var(--accent); }
+  .m-get { background: var(--amber); }
+  .path { font-family: Consolas, monospace; font-size: 10pt; font-weight: 600; }
+  .api-body { padding: 4mm 5mm; }
+  .api-body p { font-size: 9.5pt; line-height: 1.6; color: var(--body); }
+  .io { margin-top: 3mm; font-size: 9pt; color: var(--body); line-height: 1.7; }
+  .io b { color: var(--accent-dark); }
+
+  /* code block */
+  pre { background: #1e293b; color: #e2e8f0; border-radius: 12px; padding: 5mm 6mm; font-family: Consolas, monospace; font-size: 9.5pt; line-height: 1.7; margin: 3mm 0; overflow: hidden; }
+  pre .cmt { color: #94a3b8; }
+  pre .cmd { color: #7dd3fc; }
+  pre .str { color: #fbbf24; }
+
+  /* two column lists */
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; margin-top: 2mm; }
+  ul.list { list-style: none; }
+  ul.list li { padding-left: 18px; position: relative; margin-bottom: 3mm; font-size: 9.8pt; }
+  ul.list li::before { content: ""; position: absolute; left: 0; top: 7px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  ul.list.red li::before { background: #cbd5e1; }
+  .panel-title { font-size: 10.5pt; font-weight: 700; padding: 3mm 4mm; border-radius: 10px 10px 0 0; }
+  .pt-blue { background: #eef2ff; color: #3730a3; }
+  .pt-gray { background: var(--soft); color: var(--muted); }
+  .panel { border: 1px solid var(--line); border-top: none; border-radius: 0 0 10px 10px; padding: 4.5mm; }
+</style>
+</head>
+<body>
+
+<!-- ============ PAGE 1 · COVER ============ -->
+<section class="page cover">
+  <div class="doc-label">Dokumen Dokumentasi Proyek<br>Versi 1.0 &nbsp;·&nbsp; Agustus 2026</div>
+  <div class="brand"><span class="brand-dot"></span> Voice Translator</div>
+  <div class="cover-main">
+    <div class="kicker">Aplikasi Web AI Lokal · Open Source</div>
+    <h1>Terjemahan Suara<br>Dua Arah,<br><span>100% Lokal.</span></h1>
+    <p class="tagline">Voice Translator mengubah suara Anda menjadi teks lalu menerjemahkannya antara Bahasa Indonesia dan Bahasa Inggris secara real-time — seluruh pemrosesan berjalan di mesin Anda sendiri, tanpa satu byte pun data yang keluar.</p>
+    <div class="waveform">
+      <i style="height:22%"></i><i style="height:48%"></i><i style="height:30%"></i><i class="hi" style="height:88%"></i><i style="height:56%"></i><i class="hi" style="height:72%"></i><i style="height:38%"></i><i style="height:60%"></i><i class="hi" style="height:95%"></i><i style="height:44%"></i><i class="hi" style="height:68%"></i><i style="height:26%"></i><i style="height:52%"></i><i class="hi" style="height:80%"></i><i style="height:34%"></i><i style="height:58%"></i><i class="hi" style="height:90%"></i><i style="height:40%"></i><i style="height:64%"></i><i style="height:20%"></i>
+    </div>
+  </div>
+  <div class="cover-meta">
+    <span class="chip">⚡ faster-whisper</span>
+    <span class="chip">🌐 MarianMT</span>
+    <span class="chip">🚀 FastAPI</span>
+    <span class="chip">⚛️ React + TypeScript</span>
+    <span class="chip">🐳 Docker</span>
+    <span class="chip">🔒 Privasi Penuh</span>
+  </div>
+</section>
+
+<!-- ============ PAGE 2 · RINGKASAN ============ -->
+<section class="page">
+  <div class="sec-head">
+    <div class="sec-num">01</div>
+    <div><h2>Ringkasan Proyek</h2><p>Visi, masalah yang diselesaikan, dan tolok ukur keberhasilan</p></div>
+  </div>
+
+  <h3>Visi</h3>
+  <p class="body">Voice Translator adalah aplikasi web berbasis AI untuk terjemahan audio dua arah antara <strong>Bahasa Indonesia (ID)</strong> dan <strong>Bahasa Inggris (EN)</strong>. Seluruh pemrosesan berjalan lokal melalui Docker dengan model open-source — tidak ada data yang meninggalkan mesin pengguna.</p>
+
+  <h3>Latar Belakang Masalah</h3>
+  <p class="body">Pengguna membutuhkan cara yang sederhana dan privat untuk menerjemahkan percakapan lisan. Solusi yang ada saat ini memiliki dua kelemahan besar: layanan cloud mengirim rekaman suara ke server pihak ketiga (masalah privasi), sementara solusi self-hosted umumnya menuntut keahlian teknis yang tinggi untuk dipasang.</p>
+
+  <div class="callout privacy">
+    <strong>🔒 Privasi sebagai fondasi.</strong> Tidak ada panggilan API eksternal selama penggunaan normal — satu-satunya koneksi internet adalah unduhan model AI saat pertama kali dijalankan.
+  </div>
+
+  <h3>Metrik Keberhasilan (Target MVP)</h3>
+  <div class="metric-grid">
+    <div class="metric"><b>&lt; 10 dtk</b><span>Latensi transkripsi audio 10 detik</span></div>
+    <div class="metric"><b>&lt; 5 dtk</b><span>Latensi terjemahan teks</span></div>
+    <div class="metric"><b>&gt; 85%</b><span>Akurasi pengenalan suara (audio jernih)</span></div>
+    <div class="metric"><b>0</b><span>Transmisi data ke layanan eksternal</span></div>
+  </div>
+
+  <h3>Pengalaman Pengguna Inti</h3>
+  <ul class="list">
+    <li><strong>Tahan tombol untuk bicara</strong> — rekam suara dengan interaksi hold-to-talk (tekan = merekam, lepas = proses).</li>
+    <li><strong>Transkripsi instan</strong> — teks asli muncul segera setelah rekaman diproses.</li>
+    <li><strong>Terjemahan dua arah</strong> — sakelar mode <code>ID → EN</code> / <code>EN → ID</code> menentukan arah terjemahan.</li>
+    <li><strong>Tampilan berdampingan</strong> — teks asli dan hasil terjemahan ditampilkan dalam panel ganda yang jelas.</li>
+  </ul>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 2</span></div>
+</section>
+
+<!-- ============ PAGE 3 · FITUR ============ -->
+<section class="page">
+  <div class="sec-head">
+    <div class="sec-num">02</div>
+    <div><h2>Fitur Utama</h2><p>Kemampuan aplikasi pada rilis MVP</p></div>
+  </div>
+
+  <div class="feat-grid">
+    <div class="feat">
+      <div class="ico">🎙️</div>
+      <h4>Perekaman Suara Hold-to-Talk</h4>
+      <p>Merekam audio langsung dari mikrofon browser melalui API <code>MediaRecorder</code>. Cukup tahan tombol besar untuk merekam, lepaskan untuk memproses. Audio tersimpan sebagai blob webm/mp3.</p>
+    </div>
+    <div class="feat">
+      <div class="ico">📝</div>
+      <h4>Speech-to-Text Akurat</h4>
+      <p>Model <code>faster-whisper</code> versi tiny (int8, CPU) mengubah suara menjadi teks sekaligus mendeteksi bahasa yang digunakan — dioptimalkan untuk kecepatan tanpa mengorbankan akurasi.</p>
+    </div>
+    <div class="feat">
+      <div class="ico">🔄</div>
+      <h4>Terjemahan Dua Arah ID ⇄ EN</h4>
+      <p>Dua model MarianMT spesialis — <code>opus-mt-id-en</code> dan <code>opus-mt-en-id</code> — menerjemahkan teks sesuai mode aktif, dengan indikator visual arah terjemahan.</p>
+    </div>
+    <div class="feat">
+      <div class="ico">🖥️</div>
+      <h4>Antarmuka Panel Ganda</h4>
+      <p>Hasil transkrip asli dan terjemahan tampil bersebelahan dalam layout dua panel yang bersih, dibangun dengan React + TailwindCSS yang responsif.</p>
+    </div>
+    <div class="feat">
+      <div class="ico">🐳</div>
+      <h4>Deployment Satu Perintah</h4>
+      <p>Seluruh sistem berjalan sebagai dua kontainer Docker (frontend + backend) yang diluncurkan dengan satu perintah <code>docker-compose up</code> — termasuk ffmpeg untuk pra-pemrosesan audio.</p>
+    </div>
+    <div class="feat">
+      <div class="ico">🛡️</div>
+      <h4>Penanganan Error yang Ramah</h4>
+      <p>Izin mikrofon yang ditolak, kegagalan transkripsi, atau error terjemahan ditangani dengan pesan yang jelas; file audio sementara otomatis dibersihkan setelah diproses.</p>
+    </div>
+  </div>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 3</span></div>
+</section>
+
+<!-- ============ PAGE 4 · ARSITEKTUR ============ -->
+<section class="page">
+  <div class="sec-head">
+    <div class="sec-num">03</div>
+    <div><h2>Arsitektur Sistem</h2><p>Dua kontainer, empat model AI, nol layanan cloud</p></div>
+  </div>
+
+  <div class="arch">
+    <div class="arch-row">
+      <div class="node fe">
+        <h5>Frontend · React 18 + Vite</h5>
+        <small>TypeScript · TailwindCSS<br>MediaRecorder API<br><b>Port 3005</b></small>
+      </div>
+      <div class="arrow-h">⇄ HTTP/JSON</div>
+      <div class="node be">
+        <h5>Backend · FastAPI + Uvicorn</h5>
+        <small>Python · REST API<br>ffmpeg preprocessing<br><b>Port 8008 → 8000</b></small>
+      </div>
+    </div>
+
+    <div class="arrow-v">▼ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼</div>
+
+    <div class="models-row">
+      <div class="model">
+        <b>faster-whisper · tiny</b>
+        <small>Speech-to-Text<br>~39 MB · compute int8 · beam_size=5<br>Detects: id / en</small>
+      </div>
+      <div class="model">
+        <b>Helsinki-NLP MarianMT</b>
+        <small>opus-mt-id-en (ID→EN)<br>opus-mt-en-id (EN→ID)<br>Direct pipeline translation</small>
+      </div>
+    </div>
+
+    <div class="vol">📦 Volume Docker <code>model_cache</code> — cache model HuggingFace bertahan lintas restart kontainer</div>
+  </div>
+
+  <h3>Keputusan Arsitektur Kunci</h3>
+  <table>
+    <tr><th style="width:32%">Aspek</th><th>Keputusan &amp; Alasan</th></tr>
+    <tr><td><b>Komunikasi REST</b></td><td>Endpoint <code>/api/transcribe</code> dan <code>/api/translate</code> terpisah — sederhana, mudah diuji, tanpa kompleksitas WebSocket.</td></tr>
+    <tr><td><b>Model ringan di CPU</b></td><td>Whisper tiny int8 + pipeline MarianMT langsung (tanpa beam search) menjaga latensi total &lt; 15 detik per klip audio 5–10 detik.</td></tr>
+    <tr><td><b>Model sebagai volume</b></td><td>Model diunduh sekali saat run pertama, lalu dicache di Docker volume agar restart tetap cepat dan offline.</td></tr>
+    <tr><td><b>Mode produksi terpisah</b></td><td><code>docker-compose.prod.yml</code> menambahkan build image frontend (nginx), healthcheck backend, dan restart policy.</td></tr>
+  </table>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 4</span></div>
+</section>
+
+<!-- ============ PAGE 5 · TEKNOLOGI ============ -->
+<section class="page">
+  <div class="sec-head">
+    <div class="sec-num">04</div>
+    <div><h2>Teknologi yang Digunakan</h2><p>Stack open-source end-to-end</p></div>
+  </div>
+
+  <h3>Frontend</h3>
+  <table>
+    <tr><th style="width:34%">Teknologi</th><th style="width:22%">Versi</th><th>Peran</th></tr>
+    <tr><td><b>React</b></td><td>18.x</td><td>Library UI — komponen panel ganda, tombol rekam, toggle bahasa</td></tr>
+    <tr><td><b>TypeScript</b></td><td>5.x</td><td>Type safety di seluruh kode frontend</td></tr>
+    <tr><td><b>Vite</b></td><td>5.x</td><td>Dev server &amp; build tool (port dev 3005)</td></tr>
+    <tr><td><b>TailwindCSS</b></td><td>3.x</td><td>Styling utility-first</td></tr>
+    <tr><td><b>Vitest + Testing Library</b></td><td>—</td><td>Unit &amp; integration testing</td></tr>
+    <tr><td><b>Playwright</b></td><td>—</td><td>E2E testing alur rekam–terjemah</td></tr>
+  </table>
+
+  <h3>Backend</h3>
+  <table>
+    <tr><th style="width:34%">Teknologi</th><th style="width:22%">Peran</th><th>Catatan</th></tr>
+    <tr><td><b>FastAPI + Uvicorn</b></td><td>REST API server</td><td>Endpoint transcribe, translate, health</td></tr>
+    <tr><td><b>faster-whisper (tiny)</b></td><td>Speech-to-Text</td><td>~39 MB, int8, inferensi cepat di CPU</td></tr>
+    <tr><td><b>Helsinki-NLP MarianMT</b></td><td>Terjemahan ID ⇄ EN</td><td>opus-mt-id-en &amp; opus-mt-en-id</td></tr>
+    <tr><td><b>ffmpeg</b></td><td>Pra-pemrosesan audio</td><td>Termasuk dalam image kontainer backend</td></tr>
+    <tr><td><b>Pydantic</b></td><td>Validasi skema request/response</td><td>—</td></tr>
+    <tr><td><b>Pytest</b></td><td>Pengujian backend</td><td>Termasuk test layanan terjemahan</td></tr>
+  </table>
+
+  <h3>Infrastruktur</h3>
+  <table>
+    <tr><th style="width:34%">Komponen</th><th>Keterangan</th></tr>
+    <tr><td><b>Docker Compose</b></td><td>Orkestrasi 2 layanan: <code>frontend</code> (Node/Vite dev, nginx di prod) dan <code>backend</code> (Python/FastAPI)</td></tr>
+    <tr><td><b>Docker Volume</b></td><td><code>model_cache</code> menyimpan model HuggingFace (~200 MB total) lintas restart</td></tr>
+    <tr><td><b>Nginx</b></td><td>Server statis + reverse proxy API pada deployment produksi</td></tr>
+  </table>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 5</span></div>
+</section>
+
+<!-- ============ PAGE 6 · ALUR KERJA ============ -->
+<section class="page">
+  <div class="sec-head">
+    <div class="sec-num">05</div>
+    <div><h2>Alur Kerja End-to-End</h2><p>Dari suara ke terjemahan dalam 6 langkah</p></div>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-n">1</div>
+      <div><h4>Pengguna merekam suara</h4><p>Tombol mikrofon ditekan-ditahan — <code>MediaRecorder</code> di browser menangkap potongan audio secara langsung.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-n">2</div>
+      <div><h4>Audio dikirim ke backend</h4><p>Rekaman dirakit menjadi blob webm/mp3 lalu dikirim via <code>POST /api/transcribe</code> sebagai multipart/form-data.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-n">3</div>
+      <div><h4>Whisper mentranskripsi</h4><p>ffmpeg menyiapkan audio, faster-whisper menghasilkan teks beserta bahasa yang terdeteksi (<code>original_text</code>, <code>detected_language</code>).</p></div>
+    </div>
+    <div class="step">
+      <div class="step-n">4</div>
+      <div><h4>Transkrip tampil &amp; diteruskan otomatis</h4><p>Teks asli langsung muncul di panel kiri; frontend otomatis meneruskannya ke <code>POST /api/translate</code> sesuai mode aktif.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-n">5</div>
+      <div><h4>MarianMT menerjemahkan</h4><p>Model opus-mt-id-en atau opus-mt-en-id menerjemahkan teks dan mengembalikan <code>translated_text</code>.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-n">6</div>
+      <div><h4>Hasil tampil &amp; bersih-bersih</h4><p>Terjemahan muncul di panel kanan; file audio sementara di backend dihapus otomatis setelah selesai diproses.</p></div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Target performa:</strong> total waktu end-to-end &lt; 15 detik untuk klip audio 5–10 detik — transkripsi beam_size=5, terjemahan direct pipeline tanpa beam search.
+  </div>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 6</span></div>
+</section>
+
+<!-- ============ PAGE 7 · API ============ -->
+<section class="page">
+  <div class="sec-head">
+    <div class="sec-num">06</div>
+    <div><h2>Referensi API</h2><p>Tiga endpoint REST pada backend FastAPI</p></div>
+  </div>
+
+  <div class="api">
+    <div class="api-head"><span class="method m-post">POST</span><span class="path">/api/transcribe</span></div>
+    <div class="api-body">
+      <p>Mentranskripsi file audio menjadi teks menggunakan faster-whisper.</p>
+      <div class="io"><b>Request:</b> multipart/form-data — field <code>audio</code> (audio/webm atau audio/wav)</div>
+      <div class="io"><b>Response 200:</b> <code>{ "original_text": "...", "detected_language": "id" | "en" }</code></div>
+      <div class="io"><b>Error 500:</b> <code>{ "detail": "pesan kesalahan" }</code></div>
+    </div>
+  </div>
+
+  <div class="api">
+    <div class="api-head"><span class="method m-post">POST</span><span class="path">/api/translate</span></div>
+    <div class="api-body">
+      <p>Menerjemahkan teks antara Bahasa Indonesia dan Bahasa Inggris menggunakan MarianMT.</p>
+      <div class="io"><b>Request:</b> application/json — <code>{ "text", "source_lang", "target_lang" }</code></div>
+      <div class="io"><b>Response 200:</b> <code>{ "translated_text": "..." }</code></div>
+      <div class="io"><b>Error 500:</b> <code>{ "detail": "pesan kesalahan" }</code></div>
+    </div>
+  </div>
+
+  <div class="api">
+    <div class="api-head"><span class="method m-get">GET</span><span class="path">/health</span></div>
+    <div class="api-body">
+      <p>Health check untuk memantau kesiapan layanan — dipakai juga oleh Docker healthcheck pada mode produksi.</p>
+      <div class="io"><b>Response 200:</b> <code>{ "status": "ok" }</code></div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Catatan:</strong> pada lingkungan development backend di-expose di port <code>8008</code> (internal kontainer 8000); frontend produksi mengakses API melalui path relatif via reverse proxy nginx.
+  </div>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 7</span></div>
+</section>
+
+<!-- ============ PAGE 8 · CARA MENJALANKAN ============ -->
+<section class="page">
+  <div class="sec-head">
+    <div class="sec-num">07</div>
+    <div><h2>Cara Menjalankan</h2><p>Persyaratan: Docker &amp; Docker Compose terpasang</p></div>
+  </div>
+
+  <h3>1 · Siapkan konfigurasi (opsional)</h3>
+  <p class="body">Salin variabel lingkungan ke file <code>.env</code> di root proyek — misalnya <code>HF_TOKEN</code> jika mengunduh model dari HuggingFace yang memerlukan autentikasi.</p>
+
+  <h3>2 · Mode Development</h3>
+  <pre><span class="cmt"># Bangun &amp; jalankan kedua kontainer</span>
+<span class="cmd">docker-compose up --build</span>
+
+<span class="cmt"># Frontend  → http://localhost:3005</span>
+<span class="cmt"># Backend   → http://localhost:8008/health</span></pre>
+
+  <h3>3 · Mode Produksi</h3>
+  <pre><span class="cmt"># Image produksi: frontend dibangun (nginx),</span>
+<span class="cmt"># backend dengan healthcheck &amp; restart policy</span>
+<span class="cmd">docker-compose -f docker-compose.prod.yml up --build -d</span></pre>
+
+  <h3>Yang Terjadi Saat Pertama Kali Dijalankan</h3>
+  <ul class="list">
+    <li>Kontainer backend mengunduh model Whisper tiny dan kedua model MarianMT dari HuggingFace (butuh koneksi internet <em>sekali ini saja</em>).</li>
+    <li>Model disimpan di Docker volume <code>model_cache</code> — jalankan ulang berikutnya sepenuhnya offline dan lebih cepat.</li>
+  </ul>
+
+  <h3>Pemecahan Masalah Umum</h3>
+  <table>
+    <tr><th style="width:40%">Gejala</th><th>Solusi</th></tr>
+    <tr><td>Mikrofon tidak terdeteksi</td><td>Berikan izin mikrofon pada browser; pastikan mengakses via <code>localhost</code> (konteks aman).</td></tr>
+    <tr><td>Health check gagal saat startup</td><td>Tunggu unduhan model pertama selesai; cek log <code>docker-compose logs backend</code>.</td></tr>
+    <tr><td>Port bentrok</td><td>Ubah mapping port di <code>docker-compose.yml</code> (default: 3005 &amp; 8008).</td></tr>
+  </table>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 8</span></div>
+</section>
+
+<!-- ============ PAGE 9 · BATASAN & ROADMAP ============ -->
+<section class="page">
+  <div class="sec-head">
+    <div class="sec-num">08</div>
+    <div><h2>Batasan &amp; Rencana Pengembangan</h2><p>Ruang lingkup MVP dan arah pengembangan berikutnya</p></div>
+  </div>
+
+  <div class="cols">
+    <div>
+      <div class="panel-title pt-gray">Di Luar Lingkup MVP</div>
+      <div class="panel">
+        <ul class="list red">
+          <li>Autentikasi &amp; akun pengguna</li>
+          <li>Penyimpanan riwayat percakapan</li>
+          <li>WebSocket (memakai REST API saja)</li>
+          <li>Pemilihan model via UI (tiny &amp; MarianMT fixed)</li>
+          <li>Packing model offline (unduh saat run pertama)</li>
+          <li>Deteksi bahasa di luar output Whisper</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="panel-title pt-blue">Rencana Pasca-MVP</div>
+      <div class="panel">
+        <ul class="list">
+          <li><strong>Medium:</strong> Web Worker agar pemrosesan AI tidak membekukan UI</li>
+          <li><strong>Medium:</strong> Strategi caching model untuk restart lebih cepat</li>
+          <li><strong>Low:</strong> Pasangan bahasa tambahan (Jawa, Korea, dll.)</li>
+          <li><strong>Low:</strong> Pemrosesan batch untuk file audio panjang</li>
+          <li><strong>Low:</strong> Putar ulang audio asli &amp; hasil terjemahan</li>
+          <li><strong>Low:</strong> Pilihan ukuran model (tiny / base / small)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h3>Kriteria Selesai MVP</h3>
+  <ul class="list">
+    <li>Kontainer Docker terbangun dan berjalan dengan <code>docker-compose up --build</code> tanpa error.</li>
+    <li>Frontend dapat diakses, backend merespons <code>{"status": "ok"}</code> pada endpoint health.</li>
+    <li>Pengguna dapat merekam, melihat transkrip, dan menerima terjemahan dua arah ID ⇄ EN dengan benar.</li>
+    <li>File audio sementara dibersihkan otomatis; konsol browser bebas error pada pemakaian normal.</li>
+  </ul>
+
+  <div class="callout privacy" style="margin-top:8mm;">
+    <strong>Dibangun dengan prinsip: privat secara default.</strong> Voice Translator membuktikan bahwa AI speech-to-text dan machine translation kelas produksi bisa berjalan sepenuhnya di mesin sendiri — tanpa biaya API, tanpa langganan, tanpa data yang bocor keluar.
+  </div>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek · v1.0 · Agustus 2026</span><span>Halaman 9</span></div>
+</section>
+
+</body>
+</html>

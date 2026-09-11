@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Voice Translator — Dokumentasi Proyek v1.0</title>
+<style>
+  :root {
+    --ink: #0f172a;
+    --body: #334155;
+    --muted: #64748b;
+    --accent: #4f46e5;
+    --accent-dark: #312e81;
+    --accent-light: #818cf8;
+    --violet: #7c3aed;
+    --violet-light: #a78bfa;
+    --line: #e2e8f0;
+    --soft: #f1f5f9;
+    --card: #f8fafc;
+    --green: #059669;
+    --green-light: #34d399;
+    --amber: #d97706;
+    --amber-light: #fbbf24;
+    --red: #dc2626;
+    --white: #ffffff;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --shadow-sm: 0 1px 2px rgba(15,23,42,.06);
+    --shadow-md: 0 4px 12px rgba(15,23,42,.08);
+    --shadow-lg: 0 12px 28px rgba(15,23,42,.12);
+    --font-sans: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'JetBrains Mono', Consolas, 'Fira Code', monospace;
+  }
+  @page { size: A4; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html, body { font-family: var(--font-sans); color: var(--ink); font-size: 10.5pt; line-height: 1.6; }
+  .page { width: 210mm; height: 297mm; padding: 20mm 18mm; position: relative; overflow: hidden; break-after: page; background: var(--white); display: flex; flex-direction: column; }
+  .page:last-child { break-after: auto; }
+  @media print { .page { break-after: page; } .page:last-child { break-after: auto; } }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+  /* ---------- Cover ---------- */
+  .cover { background: linear-gradient(140deg, #1e1b4b 0%, #312e81 35%, #4f46e5 75%, #7c3aed 100%); color: var(--white); justify-content: space-between; padding: 24mm 20mm; }
+  .cover .brand { display: flex; align-items: center; gap: 12px; font-size: 13pt; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; opacity: .92; }
+  .brand-dot { width: 14px; height: 14px; border-radius: 4px; background: linear-gradient(135deg, #a5b4fc, #22d3ee); }
+  .cover-main { margin-top: 10mm; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .kicker { font-size: 11pt; letter-spacing: .28em; text-transform: uppercase; color: #c7d2fe; margin-bottom: 8mm; }
+  .cover h1 { font-size: 44pt; line-height: 1.04; font-weight: 800; letter-spacing: -0.02em; }
+  .cover h1 span { color: #a5b4fc; }
+  .cover .tagline { margin-top: 8mm; font-size: 13.5pt; line-height: 1.55; color: #e0e7ff; max-width: 145mm; font-weight: 300; }
+  .waveform-svg { width: 100%; max-width: 160mm; height: 38mm; margin-top: 14mm; }
+  .cover-meta { display: flex; gap: 10px; flex-wrap: wrap; border-top: 1px solid rgba(255,255,255,.25); padding-top: 7mm; }
+  .chip { font-size: 9.5pt; padding: 6px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,.4); color: #eef2ff; }
+  .doc-label { position: absolute; top: 24mm; right: 20mm; text-align: right; font-size: 9.5pt; color: #c7d2fe; line-height: 1.7; }
+
+  /* ---------- Common ---------- */
+  .sec-head { display: flex; align-items: center; gap: 14px; margin-bottom: 7mm; }
+  .sec-num { min-width: 40px; height: 40px; border-radius: 12px; background: var(--accent-dark); color: var(--white); font-weight: 700; font-size: 15pt; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .sec-head h2 { font-size: 19pt; font-weight: 750; letter-spacing: -0.01em; }
+  .sec-head p { font-size: 10pt; color: var(--muted); margin-top: 2px; }
+  h3 { font-size: 12pt; font-weight: 700; margin: 7mm 0 3mm; color: var(--accent-dark); }
+  h4 { font-size: 11pt; font-weight: 600; margin: 4mm 0 2mm; color: var(--ink); }
+  p.body, li { font-size: 10.5pt; line-height: 1.65; color: var(--body); }
+  p.body + p.body { margin-top: 2.5mm; }
+  strong { color: var(--ink); }
+  code { background: #eef2ff; color: #4338ca; padding: 1px 6px; border-radius: 5px; font-family: var(--font-mono); font-size: 8.8pt; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .footer { margin-top: auto; padding-top: 5mm; border-top: 1px solid var(--line); display: flex; justify-content: space-between; font-size: 8.5pt; color: var(--muted); }
+
+  /* Metric cards */
+  .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; margin: 5mm 0 2mm; }
+  .metric { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 5mm 4mm; text-align: center; transition: box-shadow .2s; }
+  .metric:hover { box-shadow: var(--shadow-md); }
+  .metric b { display: block; font-size: 16pt; color: var(--accent); font-weight: 800; }
+  .metric span { font-size: 8.5pt; color: var(--muted); line-height: 1.4; display: block; margin-top: 2px; }
+
+  /* Callouts */
+  .callout { border-left: 4px solid var(--accent); background: #eef2ff; border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 4mm 5mm; font-size: 10pt; line-height: 1.6; color: #3730a3; margin-top: 4mm; }
+  .callout.privacy { border-color: var(--green); background: #ecfdf5; color: #065f46; }
+  .callout.warning { border-color: var(--amber); background: #fffbeb; color: #92400e; }
+  .callout.info { border-color: var(--violet); background: #faf5ff; color: #6b21a8; }
+  .callout strong { display: block; margin-bottom: 1.5mm; font-size: 10.5pt; }
+
+  /* Feature cards */
+  .feat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4.5mm; margin-top: 2mm; }
+  .feat { border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 5.5mm; background: var(--white); box-shadow: var(--shadow-sm); transition: transform .15s, box-shadow .15s; }
+  .feat:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .feat .ico { width: 38px; height: 38px; border-radius: 10px; background: #eef2ff; color: var(--accent); font-size: 18pt; display: flex; align-items: center; justify-content: center; margin-bottom: 3.5mm; flex-shrink: 0; }
+  .feat h4 { font-size: 11pt; margin-bottom: 2mm; }
+  .feat p { font-size: 9.5pt; line-height: 1.6; color: var(--body); }
+
+  /* Architecture diagram */
+  .arch { margin-top: 4mm; }
+  .arch-row { display: flex; align-items: stretch; gap: 6mm; justify-content: center; flex-wrap: wrap; }
+  .node { border-radius: var(--radius-lg); padding: 5mm 6mm; text-align: center; min-width: 58mm; flex: 1; max-width: 80mm; }
+  .node h5 { font-size: 11pt; margin-bottom: 1.5mm; }
+  .node small { font-size: 8.5pt; line-height: 1.5; display: block; opacity: .85; }
+  .node.fe { background: #eef2ff; border: 1.5px solid #a5b4fc; color: #3730a3; }
+  .node.be { background: #ecfdf5; border: 1.5px solid #6ee7b7; color: #065f46; }
+  .arrow-h { align-self: center; color: var(--accent); font-size: 17pt; font-weight: 700; flex-shrink: 0; }
+  .arrow-v { text-align: center; color: var(--accent); font-size: 15pt; font-weight: 700; margin: 2.5mm 0; }
+  .models-row { display: flex; gap: 6mm; justify-content: center; flex-wrap: wrap; }
+  .model { background: #faf5ff; border: 1.5px dashed #d8b4fe; color: #6b21a8; border-radius: 12px; padding: 4mm 5mm; text-align: center; min-width: 52mm; flex: 1; max-width: 70mm; }
+  .model b { font-size: 10pt; display: block; margin-bottom: 1mm; }
+  .model small { font-size: 8pt; line-height: 1.45; display: block; }
+  .vol { margin: 4mm auto 0; width: 70%; background: var(--soft); border: 1.5px solid var(--line); color: var(--muted); border-radius: 999px; padding: 3mm; text-align: center; font-size: 8.5pt; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin-top: 2mm; font-size: 9.5pt; }
+  th { background: var(--accent-dark); color: var(--white); font-size: 9.5pt; text-align: left; padding: 3mm 4mm; font-weight: 600; }
+  td { padding: 3mm 4mm; border-bottom: 1px solid var(--line); color: var(--body); vertical-align: top; line-height: 1.5; }
+  tr:nth-child(even) td { background: var(--card); }
+  td b, th b { color: var(--ink); }
+  tr:hover td { background: #f8fafc; }
+
+  /* Workflow steps */
+  .steps { margin-top: 3mm; }
+  .step { display: flex; gap: 5mm; padding: 4mm 0; border-bottom: 1px dashed var(--line); }
+  .step:last-child { border-bottom: none; }
+  .step-n { min-width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: var(--white); font-weight: 700; font-size: 11pt; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1mm; }
+  .step h4 { font-size: 10.5pt; margin-bottom: 1mm; }
+  .step p { font-size: 9.5pt; line-height: 1.55; color: var(--body); }
+
+  /* API cards */
+  .api { border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden; margin-bottom: 5mm; }
+  .api-head { display: flex; align-items: center; gap: 10px; padding: 3.5mm 5mm; background: var(--soft); border-bottom: 1px solid var(--line); }
+  .method { font-family: var(--font-mono); font-size: 8.5pt; font-weight: 700; color: var(--white); padding: 2.5px 10px; border-radius: 6px; }
+  .m-post { background: var(--accent); }
+  .m-get { background: var(--amber); }
+  .path { font-family: var(--font-mono); font-size: 10pt; font-weight: 600; }
+  .api-body { padding: 4mm 5mm; }
+  .api-body p { font-size: 9.5pt; line-height: 1.6; color: var(--body); }
+  .io { margin-top: 3mm; font-size: 9pt; color: var(--body); line-height: 1.7; }
+  .io b { color: var(--accent-dark); }
+
+  /* Code blocks */
+  pre { background: #1e293b; color: #e2e8f0; border-radius: var(--radius-md); padding: 5mm 6mm; font-family: var(--font-mono); font-size: 9pt; line-height: 1.7; margin: 3mm 0; overflow: auto; white-space: pre; tab-size: 2; }
+  pre .cmt { color: #94a3b8; }
+  pre .cmd { color: #7dd3fc; }
+  pre .str { color: #fbbf24; }
+  pre .kw { color: #c084fc; }
+  pre .fn { color: #60a5fa; }
+
+  /* Two column lists */
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; margin-top: 2mm; }
+  ul.list { list-style: none; }
+  ul.list li { padding-left: 18px; position: relative; margin-bottom: 3mm; font-size: 9.8pt; }
+  ul.list li::before { content: ""; position: absolute; left: 0; top: 7px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  ul.list.red li::before { background: #cbd5e1; }
+  .panel-title { font-size: 10.5pt; font-weight: 700; padding: 3mm 4mm; border-radius: 10px 10px 0 0; }
+  .pt-blue { background: #eef2ff; color: #3730a3; }
+  .pt-gray { background: var(--soft); color: var(--muted); }
+  .panel { border: 1px solid var(--line); border-top: none; border-radius: 0 0 10px 10px; padding: 4.5mm; background: var(--white); }
+
+  /* Icon grid */
+  .icon-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; margin-top: 3mm; }
+  .icon-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 4mm; text-align: center; transition: box-shadow .2s; }
+  .icon-card:hover { box-shadow: var(--shadow-md); }
+  .icon-card .svg-wrap { width: 48px; height: 48px; margin: 0 auto 3mm; }
+  .icon-card h5 { font-size: 9.5pt; font-weight: 600; color: var(--ink); margin-bottom: 1mm; }
+  .icon-card p { font-size: 8.5pt; color: var(--muted); line-height: 1.4; }
+
+  /* Config cards */
+  .config-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4mm; margin-top: 3mm; }
+  .config-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 4mm; }
+  .config-card h5 { font-size: 10pt; font-weight: 600; color: var(--accent-dark); margin-bottom: 2mm; display: flex; align-items: center; gap: 6px; }
+  .config-card .kv { display: flex; justify-content: space-between; padding: 2mm 0; border-bottom: 1px solid var(--line); font-size: 9pt; }
+  .config-card .kv:last-child { border-bottom: none; }
+  .config-card .kv span:first-child { color: var(--muted); }
+  .config-card .kv span:last-child { font-family: var(--font-mono); color: var(--ink); font-weight: 500; }
+
+  /* Badge */
+  .badge { display: inline-flex; align-items: center; gap: 4px; font-size: 7.5pt; font-weight: 700; padding: 2px 8px; border-radius: 999px; text-transform: uppercase; letter-spacing: .05em; }
+  .badge-high { background: #fee2e2; color: #991b1b; }
+  .badge-medium { background: #fffbeb; color: #92400e; }
+  .badge-low { background: #ecfdf5; color: #065f46; }
+  .badge-done { background: #eef2ff; color: #3730a3; }
+
+  /* Roadmap list */
+  .roadmap-list { list-style: none; margin-top: 2mm; }
+  .roadmap-list li { display: flex; align-items: flex-start; gap: 5mm; padding: 4mm 0; border-bottom: 1px dashed var(--line); }
+  .roadmap-list li:last-child { border-bottom: none; }
+  .roadmap-list .rm-priority { flex-shrink: 0; }
+  .roadmap-list h5 { font-size: 10pt; font-weight: 600; color: var(--ink); margin-bottom: 1mm; }
+  .roadmap-list p { font-size: 9pt; color: var(--body); line-height: 1.5; }
+
+  /* Changelog */
+  .changelog { list-style: none; margin-top: 2mm; }
+  .changelog li { padding: 3mm 0 3mm 5mm; border-left: 2px solid var(--line); position: relative; margin-bottom: 2mm; }
+  .changelog li::before { content: ""; position: absolute; left: -6px; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); border: 2px solid var(--white); box-shadow: 0 0 0 1px var(--line); }
+  .changelog .cl-date { font-size: 8.5pt; color: var(--muted); margin-bottom: 1mm; }
+  .changelog .cl-title { font-size: 10pt; font-weight: 600; color: var(--ink); margin-bottom: 1mm; }
+  .changelog .cl-desc { font-size: 9pt; color: var(--body); line-height: 1.5; }
+
+  /* Glossary */
+  .glossary { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4mm; margin-top: 3mm; }
+  .glossary dt { font-weight: 600; color: var(--ink); font-size: 9.5pt; }
+  .glossary dd { font-size: 9pt; color: var(--body); margin: 0 0 3mm 0; line-height: 1.5; }
+
+  /* SVG sizing helpers */
+  .svg-sm { width: 100%; height: auto; max-width: 180mm; }
+  .svg-md { width: 100%; height: auto; max-width: 160mm; }
+  .svg-lg { width: 100%; height: auto; max-width: 180mm; }
+
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+  @media (prefers-contrast: high) { :root { --line: #94a3b8; --muted: #475569; } }
+
+  /* Print adjustments */
+  @media print {
+    .page { height: 296mm; }
+    .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .metric, .feat, .node, .model, .api, .config-card, .icon-card { break-inside: avoid; }
+    .steps .step { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ PAGE 1 · COVER ============ -->
+<section class="page cover" aria-labelledby="cover-title">
+  <div class="doc-label" aria-hidden="true">Dokumen Dokumentasi Proyek<br>Versi 1.0 &nbsp;·&nbsp; Agustus 2026</div>
+  <div class="brand" aria-hidden="true"><span class="brand-dot" aria-hidden="true"></span> Voice Translator</div>
+  <div class="cover-main">
+    <div class="kicker" aria-hidden="true">Aplikasi Web AI Lokal · Open Source</div>
+    <h1 id="cover-title">Terjemahan Suara<br>Dua Arah,<br><span>100% Lokal.</span></h1>
+    <p class="tagline">Voice Translator mengubah suara Anda menjadi teks lalu menerjemahkannya antara Bahasa Indonesia dan Bahasa Inggris secara real-time — seluruh pemrosesan berjalan di mesin Anda sendiri, tanpa satu byte pun data yang keluar.</p>
+    <svg class="waveform-svg" viewBox="0 0 800 120" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Visualisasi gelombang suara, merepresentasikan alur audio masuk dan keluar">
+      <defs>
+        <linearGradient id="waveGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.15)"/>
+          <stop offset="50%" stop-color="rgba(165,180,252,0.6)"/>
+          <stop offset="100%" stop-color="rgba(165,180,252,0.9)"/>
+        </linearGradient>
+        <linearGradient id="waveGradHi" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="rgba(165,180,252,0.6)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0.95)"/>
+        </linearGradient>
+      </defs>
+      <!-- Background bars -->
+      <g fill="rgba(255,255,255,0.12)">
+        <rect x="10" y="90" width="18" height="30" rx="3"/>
+        <rect x="38" y="70" width="18" height="50" rx="3"/>
+        <rect x="66" y="95" width="18" height="25" rx="3"/>
+        <rect x="122" y="65" width="18" height="55" rx="3"/>
+        <rect x="150" y="85" width="18" height="35" rx="3"/>
+        <rect x="178" y="55" width="18" height="65" rx="3"/>
+        <rect x="206" y="80" width="18" height="40" rx="3"/>
+        <rect x="234" y="60" width="18" height="60" rx="3"/>
+        <rect x="262" y="90" width="18" height="30" rx="3"/>
+        <rect x="290" y="75" width="18" height="45" rx="3"/>
+        <rect x="318" y="50" width="18" height="70" rx="3"/>
+        <rect x="346" y="82" width="18" height="38" rx="3"/>
+        <rect x="374" y="68" width="18" height="52" rx="3"/>
+        <rect x="402" y="55" width="18" height="65" rx="3"/>
+        <rect x="430" y="78" width="18" height="42" rx="3"/>
+        <rect x="458" y="92" width="18" height="28" rx="3"/>
+        <rect x="486" y="62" width="18" height="58" rx="3"/>
+        <rect x="514" y="52" width="18" height="68" rx="3"/>
+        <rect x="542" y="88" width="18" height="32" rx="3"/>
+        <rect x="570" y="72" width="18" height="48" rx="3"/>
+        <rect x="598" y="95" width="18" height="25" rx="3"/>
+        <rect x="626" y="65" width="18" height="55" rx="3"/>
+        <rect x="654" y="58" width="18" height="62" rx="3"/>
+        <rect x="682" y="90" width="18" height="30" rx="3"/>
+        <rect x="710" y="74" width="18" height="46" rx="3"/>
+        <rect x="738" y="50" width="18" height="70" rx="3"/>
+        <rect x="766" y="85" width="18" height="35" rx="3"/>
+      </g>
+      <!-- Foreground highlighted bars -->
+      <g fill="url(#waveGradHi)">
+        <rect x="94" y="35" width="18" height="85" rx="3" opacity="0.9"/>
+        <rect x="178" y="20" width="18" height="100" rx="3" opacity="0.95"/>
+        <rect x="318" y="15" width="18" height="105" rx="3" opacity="0.95"/>
+        <rect x="402" y="18" width="18" height="102" rx="3" opacity="0.95"/>
+        <rect x="514" y="22" width="18" height="98" rx="3" opacity="0.9"/>
+        <rect x="654" y="25" width="18" height="95" rx="3" opacity="0.9"/>
+        <rect x="738" y="15" width="18" height="105" rx="3" opacity="0.95"/>
+      </g>
+      <!-- Center line indicator -->
+      <line x1="10" y1="60" x2="790" y2="60" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="8,4"/>
+    </svg>
+  </div>
+  <div class="cover-meta" role="list" aria-label="Teknologi yang digunakan">
+    <span class="chip" role="listitem">⚡ faster-whisper</span>
+    <span class="chip" role="listitem">🌐 MarianMT</span>
+    <span class="chip" role="listitem">🚀 FastAPI</span>
+    <span class="chip" role="listitem">⚛️ React + TypeScript</span>
+    <span class="chip" role="listitem">🐳 Docker</span>
+    <span class="chip" role="listitem">🔒 Privasi Penuh</span>
+  </div>
+</section>
+
+<!-- ============ PAGE 2 · RINGKASAN ============ -->
+<section class="page" aria-labelledby="summary-title">
+  <div class="sec-head">
+    <div class="sec-num" aria-hidden="true">01</div>
+    <div>
+      <h2 id="summary-title">Ringkasan Proyek</h2>
+      <p>Visi, masalah yang diselesaikan, dan tolok ukur keberhasilan</p>
+    </div>
+  </div>
+
+  <h3>Visi</h3>
+  <p class="body">Voice Translator adalah aplikasi web berbasis AI untuk terjemahan audio dua arah antara <strong>Bahasa Indonesia (ID)</strong> dan <strong>Bahasa Inggris (EN)</strong>. Seluruh pemrosesan berjalan lokal melalui Docker dengan model open-source — tidak ada data yang meninggalkan mesin pengguna.</p>
+
+  <h3>Latar Belakang Masalah</h3>
+  <p class="body">Pengguna membutuhkan cara yang sederhana dan privat untuk menerjemahkan percakapan lisan. Solusi yang ada saat ini memiliki dua kelemahan besar: layanan cloud mengirim rekaman suara ke server pihak ketiga (masalah privasi), sementara solusi self-hosted umumnya menuntut keahlian teknis yang tinggi untuk dipasang.</p>
+
+  <div class="callout privacy" role="note" aria-label="Privasi sebagai fondasi">
+    <strong>🔒 Privasi sebagai fondasi.</strong> Tidak ada panggilan API eksternal selama penggunaan normal — satu-satunya koneksi internet adalah unduhan model AI saat pertama kali dijalankan.
+  </div>
+
+  <h3>Metrik Keberhasilan (Target MVP)</h3>
+  <div class="metric-grid" role="list" aria-label="Metrik keberhasilan MVP">
+    <div class="metric" role="listitem"><b>< 10 dtk</b><span>Latensi transkripsi audio 10 detik</span></div>
+    <div class="metric" role="listitem"><b>< 5 dtk</b><span>Latensi terjemahan teks</span></div>
+    <div class="metric" role="listitem"><b>> 85%</b><span>Akurasi pengenalan suara (audio jernih)</span></div>
+    <div class="metric" role="listitem"><b>0</b><span>Transmisi data ke layanan eksternal</span></div>
+  </div>
+
+  <h3>Pengalaman Pengguna Inti</h3>
+  <ul class="list" role="list">
+    <li><strong>Tahan tombol untuk bicara</strong> — rekam suara dengan interaksi hold-to-talk (tekan = merekam, lepas = proses).</li>
+    <li><strong>Transkripsi instan</strong> — teks asli muncul segera setelah rekaman diproses.</li>
+    <li><strong>Terjemahan dua arah</strong> — sakelar mode <code>ID → EN</code> / <code>EN → ID</code> menentukan arah terjemahan.</li>
+    <li><strong>Tampilan berdampingan</strong> — teks asli dan hasil terjemahan ditampilkan dalam panel ganda yang jelas.</li>
+  </ul>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 2</span></div>
+</section>
+
+<!-- ============ PAGE 3 · FITUR + ICON SVG ============ -->
+<section class="page" aria-labelledby="features-title">
+  <div class="sec-head">
+    <div class="sec-num" aria-hidden="true">02</div>
+    <div>
+      <h2 id="features-title">Fitur Utama</h2>
+      <p>Kemampuan aplikasi pada rilis MVP</p>
+    </div>
+  </div>
+
+  <!-- SVG Feature Icons -->
+  <div class="icon-grid" role="list" aria-label="Ikon fitur utama">
+    <div class="icon-card" role="listitem">
+      <div class="svg-wrap" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="24" cy="24" r="20" fill="#eef2ff"/>
+          <path d="M24 10a14 14 0 1 0 0 28 14 14 0 0 0 0-28zm0 2a12 12 0 1 1 0 24 12 12 0 0 1 0-24z" fill="#4f46e5"/>
+          <path d="M24 16v8l5 5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h5>Perekaman Hold-to-Talk</h5>
+      <p>MediaRecorder API, blob webm/mp3</p>
+    </div>
+    <div class="icon-card" role="listitem">
+      <div class="svg-wrap" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="24" cy="24" r="20" fill="#eef2ff"/>
+          <path d="M14 18h20M14 24h20M14 30h14" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="34" cy="30" r="2" fill="#4f46e5"/>
+        </svg>
+      </div>
+      <h5>Speech-to-Text Akurat</h5>
+      <p>faster-whisper tiny, int8, beam=5</p>
+    </div>
+    <div class="icon-card" role="listitem">
+      <div class="svg-wrap" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="24" cy="24" r="20" fill="#eef2ff"/>
+          <path d="M14 24h20M24 14v20" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M18 18l6 6M24 18l-6 6" stroke="#4f46e5" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h5>Terjemahan ID ⇄ EN</h5>
+      <p>MarianMT opus-mt-id-en / en-id</p>
+    </div>
+    <div class="icon-card" role="listitem">
+      <div class="svg-wrap" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="24" cy="24" r="20" fill="#eef2ff"/>
+          <rect x="12" y="14" width="24" height="20" rx="3" stroke="#4f46e5" stroke-width="2.5"/>
+          <line x1="12" y1="22" x2="36" y2="22" stroke="#4f46e5" stroke-width="2"/>
+          <line x1="12" y1="28" x2="28" y2="28" stroke="#4f46e5" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h5>Antarmuka Panel Ganda</h5>
+      <p>React + TailwindCSS responsif</p>
+    </div>
+    <div class="icon-card" role="listitem">
+      <div class="svg-wrap" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="24" cy="24" r="20" fill="#eef2ff"/>
+          <path d="M16 30V18a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 22h16M20 14v4M28 14v4" stroke="#4f46e5" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h5>Deployment Satu Perintah</h5>
+      <p>docker-compose up --build</p>
+    </div>
+    <div class="icon-card" role="listitem">
+      <div class="svg-wrap" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="24" cy="24" r="20" fill="#eef2ff"/>
+          <path d="M24 12a12 12 0 1 0 0 24 12 12 0 0 0 0-24zm0 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z" fill="#4f46e5"/>
+          <path d="M18 24l4 4 8-8" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h5>Penanganan Error Ramah</h5>
+      <p>Pesan jelas, pembersihan otomatis</p>
+    </div>
+  </div>
+
+  <div class="feat-grid" role="list" aria-label="Detail fitur utama">
+    <div class="feat" role="listitem">
+      <div class="ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+      </div>
+      <h4>Perekaman Suara Hold-to-Talk</h4>
+      <p>Merekam audio langsung dari mikrofon browser melalui API <code>MediaRecorder</code>. Cukup tahan tombol besar untuk merekam, lepaskan untuk memproses. Audio tersimpan sebagai blob webm/mp3.</p>
+    </div>
+    <div class="feat" role="listitem">
+      <div class="ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 17H20"/><path d="M12 12v7"/><path d="M10 12h4"/></svg>
+      </div>
+      <h4>Speech-to-Text Akurat</h4>
+      <p>Model <code>faster-whisper</code> versi tiny (int8, CPU) mengubah suara menjadi teks sekaligus mendeteksi bahasa yang digunakan — dioptimalkan untuk kecepatan tanpa mengorbankan akurasi.</p>
+    </div>
+    <div class="feat" role="listitem">
+      <div class="ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-9 9c-2.52 0-4.93-1-6.74-2.74L3 8"/><path d="M3 3l18 18"/><path d="M12 12a9 9 0 0 0 9-9 2.52 2.52 0 0 1 2.74-2.74 9.04 9.04 0 0 0 4.26 6.74"/></svg>
+      </div>
+      <h4>Terjemahan Dua Arah ID ⇄ EN</h4>
+      <p>Dua model MarianMT spesialis — <code>opus-mt-id-en</code> dan <code>opus-mt-en-id</code> — menerjemahkan teks sesuai mode aktif, dengan indikator visual arah terjemahan.</p>
+    </div>
+    <div class="feat" role="listitem">
+      <div class="ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+      </div>
+      <h4>Antarmuka Panel Ganda</h4>
+      <p>Hasil transkrip asli dan terjemahan tampil bersebelahan dalam layout dua panel yang bersih, dibangun dengan React + TailwindCSS yang responsif.</p>
+    </div>
+    <div class="feat" role="listitem">
+      <div class="ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M12 22V12"/><path d="M3 10l18-6"/></svg>
+      </div>
+      <h4>Deployment Satu Perintah</h4>
+      <p>Seluruh sistem berjalan sebagai dua kontainer Docker (frontend + backend) yang diluncurkan dengan satu perintah <code>docker-compose up</code> — termasuk ffmpeg untuk pra-pemrosesan audio.</p>
+    </div>
+    <div class="feat" role="listitem">
+      <div class="ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      </div>
+      <h4>Penanganan Error yang Ramah</h4>
+      <p>Izin mikrofon yang ditolak, kegagalan transkripsi, atau error terjemahan ditangani dengan pesan yang jelas; file audio sementara otomatis dibersihkan setelah diproses.</p>
+    </div>
+  </div>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 3</span></div>
+</section>
+
+<!-- ============ PAGE 4 · ARSITEKTUR (SVG Diagram) ============ -->
+<section class="page" aria-labelledby="arch-title">
+  <div class="sec-head">
+    <div class="sec-num" aria-hidden="true">03</div>
+    <div>
+      <h2 id="arch-title">Arsitektur Sistem</h2>
+      <p>Dua kontainer, empat model AI, nol layanan cloud</p>
+    </div>
+  </div>
+
+  <!-- Architecture SVG Diagram -->
+  <div class="arch" role="img" aria-label="Diagram arsitektur sistem Voice Translator: Frontend React (port 3005) berkomunikasi via HTTP/JSON dengan Backend FastAPI (port 8008), yang mengakses model Whisper tiny dan MarianMT ID⇄EN melalui volume Docker model_cache">
+    <svg class="svg-lg" viewBox="0 0 900 480" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="arch-title-svg arch-desc-svg">
+      <title id="arch-title-svg">Arsitektur Sistem Voice Translator</title>
+      <desc id="arch-desc-svg">Frontend React di port 3005 berkomunikasi via HTTP/JSON dengan Backend FastAPI di port 8008. Backend mengakses model Whisper tiny untuk STT dan MarianMT untuk terjemahan, dengan model di-cache di Docker volume model_cache.</desc>
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#4f46e5"/>
+        </marker>
+        <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#059669"/>
+        </marker>
+        <marker id="arrowhead-violet" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/>
+        </marker>
+        <linearGradient id="feGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#eef2ff"/>
+          <stop offset="100%" stop-color="#e0e7ff"/>
+        </linearGradient>
+        <linearGradient id="beGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#ecfdf5"/>
+          <stop offset="100%" stop-color="#d1fae5"/>
+        </linearGradient>
+        <linearGradient id="modelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#faf5ff"/>
+          <stop offset="100%" stop-color="#f3e8ff"/>
+        </linearGradient>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.08"/>
+        </filter>
+      </defs>
+
+      <!-- Frontend Node -->
+      <g filter="url(#shadow)">
+        <rect x="40" y="60" width="220" height="160" rx="16" fill="url(#feGrad)" stroke="#a5b4fc" stroke-width="2"/>
+        <text x="150" y="95" text-anchor="middle" font-family="var(--font-sans)" font-size="16" font-weight="700" fill="#3730a3">Frontend</text>
+        <text x="150" y="120" text-anchor="middle" font-family="var(--font-sans)" font-size="13" font-weight="600" fill="#4338ca">React 18 + Vite</text>
+        <text x="150" y="145" text-anchor="middle" font-family="var(--font-sans)" font-size="11" fill="#6366f1">TypeScript · TailwindCSS</text>
+        <text x="150" y="170" text-anchor="middle" font-family="var(--font-sans)" font-size="11" fill="#6366f1">MediaRecorder API</text>
+        <rect x="110" y="195" width="80" height="24" rx="12" fill="#4f46e5" opacity="0.15" stroke="#4f46e5" stroke-width="1.5"/>
+        <text x="150" y="212" text-anchor="middle" font-family="var(--font-sans)" font-size="10" font-weight="600" fill="#4f46e5">Port 3005</text>
+      </g>
+
+      <!-- Bidirectional arrows between FE and BE -->
+      <path d="M260 135 C320 135, 320 135, 380 135" fill="none" stroke="#4f46e5" stroke-width="2.5" marker-end="url(#arrowhead)" stroke-dasharray="8,4"/>
+      <path d="M380 155 C320 155, 320 155, 260 155" fill="none" stroke="#4f46e5" stroke-width="2.5" marker-end="url(#arrowhead)" stroke-dasharray="8,4"/>
+      <text x="450" y="130" text-anchor="middle" font-family="var(--font-sans)" font-size="10" fill="#4f46e5" font-weight="600">HTTP/JSON</text>
+      <text x="450" y="162" text-anchor="middle" font-family="var(--font-sans)" font-size="10" fill="#4f46e5" font-weight="600">REST API</text>
+
+      <!-- Backend Node -->
+      <g filter="url(#shadow)">
+        <rect x="480" y="60" width="240" height="160" rx="16" fill="url(#beGrad)" stroke="#6ee7b7" stroke-width="2"/>
+        <text x="600" y="95" text-anchor="middle" font-family="var(--font-sans)" font-size="16" font-weight="700" fill="#065f46">Backend</text>
+        <text x="600" y="120" text-anchor="middle" font-family="var(--font-sans)" font-size="13" font-weight="600" fill="#059669">FastAPI + Uvicorn</text>
+        <text x="600" y="145" text-anchor="middle" font-family="var(--font-sans)" font-size="11" fill="#047857">Python · REST API</text>
+        <text x="600" y="170" text-anchor="middle" font-family="var(--font-sans)" font-size="11" fill="#047857">ffmpeg preprocessing</text>
+        <rect x="540" y="195" width="120" height="24" rx="12" fill="#059669" opacity="0.15" stroke="#059669" stroke-width="1.5"/>
+        <text x="600" y="212" text-anchor="middle" font-family="var(--font-sans)" font-size="10" font-weight="600" fill="#059669">Port 8008 → 8000</text>
+      </g>
+
+      <!-- Vertical arrows to models -->
+      <path d="M200 220 V270" fill="none" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <path d="M600 220 V270" fill="none" stroke="#059669" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+      <text x="180" y="250" text-anchor="middle" font-family="var(--font-sans)" font-size="10" fill="#4f46e5" font-weight="600" transform="rotate(-90 180,250)">Model Access</text>
+      <text x="620" y="250" text-anchor="middle" font-family="var(--font-sans)" font-size="10" fill="#059669" font-weight="600" transform="rotate(-90 620,250)">Model Access</text>
+
+      <!-- Model Cards -->
+      <g filter="url(#shadow)">
+        <rect x="80" y="290" width="240" height="130" rx="14" fill="url(#modelGrad)" stroke="#d8b4fe" stroke-width="2" stroke-dasharray="6,4"/>
+        <text x="200" y="320" text-anchor="middle" font-family="var(--font-sans)" font-size="14" font-weight="700" fill="#6b21a8">faster-whisper · tiny</text>
+        <text x="200" y="345" text-anchor="middle" font-family="var(--font-sans)" font-size="11" fill="#7c3aed">Speech-to-Text</text>
+        <text x="200" y="368" text-anchor="middle" font-family="var(--font-sans)" font-size="10" fill="#a78bfa">~39 MB · compute int8</text>
+        <text x="200" y="388" text-anchor="middle" font-family="var(--font-sans)" font-size="10" fill="#a78bfa">beam_size=5 · Deteksi: id/en</text>
+      </g>
+
+      <g filter="url(#shadow)">
+        <rect x="380" y="290" width="240" height="130" rx="14" fill="url(#modelGrad)" stroke="#d8b4fe" stroke-width="2" stroke-dasharray="6,4"/>
+        <text x="500" y="320" text-anchor="middle" font-family="var(--font-sans)" font-size="14" font-weight="700" fill="#6b21a8">Helsinki-NLP MarianMT</text>
+        <text x="500" y="345" text-anchor="middle" font-family="var(--font-sans)" font-size="11" fill="#7c3aed">Translation ID ⇄ EN</text>
+        <text x="500" y="368" text-anchor="middle" font-family="var(--font-sans)" font-size="10" fill="#a78bfa">opus-mt-id-en (ID→EN)</text>
+        <text x="500" y="388" text-anchor="middle" font-family="var(--font-sans)" font-size="10" fill="#a78bfa">opus-mt-en-id (EN→ID)</text>
+      </g>
+
+      <g filter="url(#shadow)">
+        <rect x="680" y="290" width="180" height="130" rx="14" fill="url(#modelGrad)" stroke="#d8b4fe" stroke-width="2" stroke-dasharray="6,4"/>
+        <text x="770" y="320" text-anchor="middle" font-family="var(--font-sans)" font-size="14" font-weight="700" fill="#6b21a8">Volume Docker</text>
+        <text x="770" y="350" text-anchor="middle" font-family="var(--font-sans)" font-size="11" fill="#7c3aed"><tspan font-weight="600">model_cache</tspan></text>
+        <text x="770" y="372" text-anchor="middle" font-family="var(--font-sans)" font-size="10" fill="#a78bfa">Cache HuggingFace</text>
+        <text x="770" y="390" text-anchor="middle" font-family="var(--font-sans)" font-size="10" fill="#a78bfa">~200 MB total</text>
+        <text x="770" y="408" text-anchor="middle" font-family="var(--font-sans)" font-size="10" fill="#a78bfa">Persisten lintas restart</text>
+      </g>
+
+      <!-- Connection lines from BE to models -->
+      <path d="M540 290 L320 290" fill="none" stroke="#059669" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.6"/>
+      <path d="M540 320 L320 320" fill="none" stroke="#059669" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.6"/>
+      <path d="M540 350 L320 350" fill="none" stroke="#059669" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.6"/>
+    </svg>
+  </div>
+
+  <h3>Keputusan Arsitektur Kunci</h3>
+  <table>
+    <thead>
+      <tr><th style="width:32%">Aspek</th><th>Keputusan & Alasan</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>Komunikasi REST</b></td><td>Endpoint <code>/api/transcribe</code> dan <code>/api/translate</code> terpisah — sederhana, mudah diuji, tanpa kompleksitas WebSocket.</td></tr>
+      <tr><td><b>Model ringan di CPU</b></td><td>Whisper tiny int8 + pipeline MarianMT langsung (tanpa beam search) menjaga latensi total < 15 detik per klip audio 5–10 detik.</td></tr>
+      <tr><td><b>Model sebagai volume</b></td><td>Model diunduh sekali saat run pertama, lalu dicache di Docker volume agar restart tetap cepat dan offline.</td></tr>
+      <tr><td><b>Mode produksi terpisah</b></td><td><code>docker-compose.prod.yml</code> menambahkan build image frontend (nginx), healthcheck backend, dan restart policy.</td></tr>
+      <tr><td><b>Deteksi device otomatis</b></td><td>Utils <code>device.py</code> mendeteksi CUDA → gunakan <code>float16</code>, fallback CPU → <code>int8</code>.</td></tr>
+      <tr><td><b>Singleton services</b></td><td>STT & Translation service diload sekali (lazy init), cache pipeline MarianMT per language pair.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 4</span></div>
+</section>
+
+<!-- ============ PAGE 5 · TEKNOLOGI ============ -->
+<section class="page" aria-labelledby="tech-title">
+  <div class="sec-head">
+    <div class="sec-num" aria-hidden="true">04</div>
+    <div>
+      <h2 id="tech-title">Teknologi yang Digunakan</h2>
+      <p>Stack open-source end-to-end</p>
+    </div>
+  </div>
+
+  <h3>Frontend</h3>
+  <table>
+    <thead>
+      <tr><th style="width:34%">Teknologi</th><th style="width:22%">Versi</th><th>Peran</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>React</b></td><td>18.x</td><td>Library UI — komponen panel ganda, tombol rekam, toggle bahasa</td></tr>
+      <tr><td><b>TypeScript</b></td><td>5.x</td><td>Type safety di seluruh kode frontend</td></tr>
+      <tr><td><b>Vite</b></td><td>5.x</td><td>Dev server & build tool (port dev 3005)</td></tr>
+      <tr><td><b>TailwindCSS</b></td><td>3.x</td><td>Styling utility-first</td></tr>
+      <tr><td><b>Vitest + Testing Library</b></td><td>—</td><td>Unit & integration testing</td></tr>
+      <tr><td><b>Playwright</b></td><td>—</td><td>E2E testing alur rekam–terjemah</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Backend</h3>
+  <table>
+    <thead>
+      <tr><th style="width:34%">Teknologi</th><th style="width:22%">Peran</th><th>Catatan</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>FastAPI + Uvicorn</b></td><td>REST API server</td><td>Endpoint transcribe, translate, health</td></tr>
+      <tr><td><b>faster-whisper (tiny)</b></td><td>Speech-to-Text</td><td>~39 MB, int8, inferensi cepat di CPU</td></tr>
+      <tr><td><b>Helsinki-NLP MarianMT</b></td><td>Terjemahan ID ⇄ EN</td><td>opus-mt-id-en & opus-mt-en-id</td></tr>
+      <tr><td><b>ffmpeg</b></td><td>Pra-pemrosesan audio</td><td>Termasuk dalam image kontainer backend</td></tr>
+      <tr><td><b>Pydantic</b></td><td>Validasi skema request/response</td><td>—</td></tr>
+      <tr><td><b>Pytest</b></td><td>Pengujian backend</td><td>Termasuk test layanan terjemahan</td></tr>
+      <tr><td><b>python-multipart</b></td><td>Upload file audio</td><td>FormData handling</td></tr>
+      <tr><td><b>torch</b></td><td>Backend CUDA/CPU</td><td>Auto-detect via ctranslate2</td></tr>
+      <tr><td><b>transformers</b></td><td>Pipeline MarianMT</td><td>Lazy load + cache per language pair</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Infrastruktur</h3>
+  <table>
+    <thead>
+      <tr><th style="width:34%">Komponen</th><th>Keterangan</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>Docker Compose</b></td><td>Orkestrasi 2 layanan: <code>frontend</code> (Node/Vite dev, nginx di prod) dan <code>backend</code> (Python/FastAPI)</td></tr>
+      <tr><td><b>Docker Volume</b></td><td><code>model_cache</code> menyimpan model HuggingFace (~200 MB total) lintas restart</td></tr>
+      <tr><td><b>Nginx</b></td><td>Server statis + reverse proxy API pada deployment produksi</td></tr>
+      <tr><td><b>Dockerfile (backend)</b></td><td>Python 3.10-slim + ffmpeg + pip install requirements</td></tr>
+      <tr><td><b>Vite Proxy</b></td><td>Dev: <code>/api</code> → <code>http://backend:8000</code></td></tr>
+    </tbody>
+  </table>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 5</span></div>
+</section>
+
+<!-- ============ PAGE 6 · ALUR KERJA (SVG Sequence Diagram) ============ -->
+<section class="page" aria-labelledby="flow-title">
+  <div class="sec-head">
+    <div class="sec-num" aria-hidden="true">05</div>
+    <div>
+      <h2 id="flow-title">Alur Kerja End-to-End</h2>
+      <p>Dari suara ke terjemahan dalam 6 langkah</p>
+    </div>
+  </div>
+
+  <!-- Sequence Flow SVG Diagram -->
+  <div class="arch" role="img" aria-label="Diagram urutan end-to-end: 1) User merekam via MediaRecorder, 2) POST /api/transcribe multipart audio, 3) Backend ffmpeg + Whisper STT, 4) Response transkrip + bahasa, 5) POST /api/translate JSON, 6) MarianMT terjemah → Response translated_text">
+    <svg class="svg-lg" viewBox="0 0 900 520" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="flow-title-svg flow-desc-svg">
+      <title id="flow-title-svg">Alur Kerja End-to-End Voice Translator</title>
+      <desc id="flow-desc-svg">Diagram urutan 6 langkah: User merekam suara, kirim ke backend transcribe, Whisper menghasilkan teks, frontend terima transkrip, kirim ke translate, MarianMT terjemahkan, tampilkan hasil.</desc>
+      <defs>
+        <marker id="seqArrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#4f46e5"/></marker>
+        <marker id="seqArrowRet" markerWidth="10" markerHeight="7" refX="1" refY="3.5" orient="auto"><polygon points="10 0, 0 3.5, 10 7" fill="#059669"/></marker>
+        <linearGradient id="actorGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#f8fafc"/><stop offset="100%" stop-color="#f1f5f9"/></linearGradient>
+        <linearGradient id="sysGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#eef2ff"/><stop offset="100%" stop-color="#e0e7ff"/></linearGradient>
+        <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.06"/></filter>
+      </defs>
+
+      <!-- Actors / Participants -->
+      <g font-family="var(--font-sans)">
+        <!-- User -->
+        <rect x="40" y="30" width="140" height="50" rx="10" fill="url(#actorGrad)" stroke="#94a3b8" stroke-width="1.5" filter="url(#softShadow)"/>
+        <text x="110" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="#334155">Pengguna</text>
+        <text x="110" y="73" text-anchor="middle" font-size="9" fill="#64748b">Browser</text>
+
+        <!-- Frontend -->
+        <rect x="220" y="30" width="180" height="50" rx="10" fill="url(#sysGrad)" stroke="#a5b4fc" stroke-width="1.5" filter="url(#softShadow)"/>
+        <text x="310" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="#3730a3">Frontend</text>
+        <text x="310" y="73" text-anchor="middle" font-size="9" fill="#6366f1">React + Vite (3005)</text>
+
+        <!-- Backend -->
+        <rect x="460" y="30" width="180" height="50" rx="10" fill="url(#sysGrad)" stroke="#6ee7b7" stroke-width="1.5" filter="url(#softShadow)"/>
+        <text x="550" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="#065f46">Backend</text>
+        <text x="550" y="73" text-anchor="middle" font-size="9" fill="#047857">FastAPI (8008)</text>
+
+        <!-- Whisper -->
+        <rect x="700" y="30" width="160" height="50" rx="10" fill="url(#sysGrad)" stroke="#d8b4fe" stroke-width="1.5" filter="url(#softShadow)"/>
+        <text x="780" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="#6b21a8">faster-whisper</text>
+        <text x="780" y="73" text-anchor="middle" font-size="9" fill="#7c3aed">tiny · int8</text>
+
+        <!-- MarianMT -->
+        <rect x="700" y="100" width="160" height="50" rx="10" fill="url(#sysGrad)" stroke="#d8b4fe" stroke-width="1.5" filter="url(#softShadow)"/>
+        <text x="780" y="128" text-anchor="middle" font-size="12" font-weight="700" fill="#6b21a8">MarianMT</text>
+        <text x="780" y="143" text-anchor="middle" font-size="9" fill="#7c3aed">opus-mt-id-en/en-id</text>
+      </g>
+
+      <!-- Lifelines -->
+      <g stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="6,6">
+        <line x1="110" y1="80" x2="110" y2="480"/>
+        <line x1="310" y1="80" x2="310" y2="480"/>
+        <line x1="550" y1="80" x2="550" y2="480"/>
+        <line x1="780" y1="80" x2="780" y2="480"/>
+      </g>
+
+      <!-- Step 1: User records -->
+      <g>
+        <circle cx="110" cy="100" r="8" fill="#4f46e5"/>
+        <text x="110" y="95" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">1</text>
+        <path d="M110 108 L110 125" stroke="#4f46e5" stroke-width="2" marker-end="url(#seqArrow)"/>
+        <text x="110" y="120" text-anchor="middle" font-size="8.5" fill="#4f46e5" font-weight="600">Hold-to-talk</text>
+        <text x="110" y="135" text-anchor="middle" font-size="8" fill="#64748b">MediaRecorder start</text>
+      </g>
+      <path d="M310 115 L310 115" fill="none"/>
+      <text x="310" y="115" text-anchor="middle" font-size="8" fill="#64748b">Audio chunks</text>
+
+      <!-- Step 2: POST /api/transcribe -->
+      <path d="M310 155 L460 155" fill="none" stroke="#4f46e5" stroke-width="2" marker-end="url(#seqArrow)"/>
+      <text x="385" y="150" text-anchor="middle" font-size="9" fill="#4f46e5" font-weight="600">POST /api/transcribe</text>
+      <text x="385" y="163" text-anchor="middle" font-size="8" fill="#64748b">multipart/form-data (audio/webm)</text>
+
+      <!-- Step 3: Backend → Whisper -->
+      <path d="M550 180 L700 180" fill="none" stroke="#059669" stroke-width="2" marker-end="url(#seqArrow)"/>
+      <text x="625" y="175" text-anchor="middle" font-size="9" fill="#059669" font-weight="600">ffmpeg → Whisper</text>
+      <text x="625" y="188" text-anchor="middle" font-size="8" fill="#64748b">audio prep + transcribe</text>
+
+      <!-- Step 4: Whisper response -->
+      <path d="M700 210 L550 210" fill="none" stroke="#059669" stroke-width="2" marker-end="url(#seqArrowRet)"/>
+      <text x="625" y="205" text-anchor="middle" font-size="9" fill="#059669" font-weight="600">original_text + lang</text>
+      <text x="625" y="218" text-anchor="middle" font-size="8" fill="#64748b">{text, detected_language}</text>
+
+      <!-- Step 5: Backend → Frontend response -->
+      <path d="M550 240 L310 240" fill="none" stroke="#4f46e5" stroke-width="2" marker-end="url(#seqArrowRet)"/>
+      <text x="430" y="235" text-anchor="middle" font-size="9" fill="#4f46e5" font-weight="600">Response 200 JSON</text>
+      <text x="430" y="248" text-anchor="middle" font-size="8" fill="#64748b">Panel kiri: transkrip tampil</text>
+
+      <!-- Step 6: Frontend auto POST /api/translate -->
+      <path d="M310 275 L550 275" fill="none" stroke="#4f46e5" stroke-width="2" marker-end="url(#seqArrow)"/>
+      <text x="430" y="270" text-anchor="middle" font-size="9" fill="#4f46e5" font-weight="600">POST /api/translate</text>
+      <text x="430" y="283" text-anchor="middle" font-size="8" fill="#64748b">{text, source_lang, target_lang}</text>
+
+      <!-- Step 7: Backend → MarianMT -->
+      <path d="M550 305 L700 305" fill="none" stroke="#059669" stroke-width="2" marker-end="url(#seqArrow)"/>
+      <text x="625" y="300" text-anchor="middle" font-size="9" fill="#059669" font-weight="600">Pipeline translate</text>
+      <text x="625" y="313" text-anchor="middle" font-size="8" fill="#64748b">MarianMT inference</text>
+
+      <!-- Step 8: MarianMT response -->
+      <path d="M700 335 L550 335" fill="none" stroke="#059669" stroke-width="2" marker-end="url(#seqArrowRet)"/>
+      <text x="625" y="330" text-anchor="middle" font-size="9" fill="#059669" font-weight="600">translated_text</text>
+
+      <!-- Step 9: Backend → Frontend -->
+      <path d="M550 365 L310 365" fill="none" stroke="#4f46e5" stroke-width="2" marker-end="url(#seqArrowRet)"/>
+      <text x="430" y="360" text-anchor="middle" font-size="9" fill="#4f46e5" font-weight="600">Response 200 JSON</text>
+      <text x="430" y="373" text-anchor="middle" font-size="8" fill="#64748b">Panel kanan: terjemahan tampil</text>
+
+      <!-- Cleanup -->
+      <path d="M550 395 L550 415" fill="none" stroke="#dc2626" stroke-width="2" marker-end="url(#seqArrow)" stroke-dasharray="4,4"/>
+      <text x="550" y="410" text-anchor="middle" font-size="9" fill="#dc2626" font-weight="600">Cleanup</text>
+      <text x="550" y="423" text-anchor="middle" font-size="8" fill="#dc2626">Temp file dihapus</text>
+
+      <!-- Step labels on left -->
+      <g font-family="var(--font-sans)" font-size="8.5" fill="#64748b">
+        <text x="20" y="115" text-anchor="end">1. Rekam</text>
+        <text x="20" y="165" text-anchor="end">2. Kirim Audio</text>
+        <text x="20" y="195" text-anchor="end">3. STT Processing</text>
+        <text x="20" y="225" text-anchor="end">4. Terima Transkrip</text>
+        <text x="20" y="255" text-anchor="end">5. Tampilkan & Teruskan</text>
+        <text x="20" y="285" text-anchor="end">6. Minta Terjemahan</text>
+        <text x="20" y="315" text-anchor="end">7. MT Processing</text>
+        <text x="20" y="345" text-anchor="end">8. Terima Hasil</text>
+        <text x="20" y="375" text-anchor="end">9. Tampilkan Terjemahan</text>
+        <text x="20" y="410" text-anchor="end">10. Bersih-bersih</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="callout" role="note" aria-label="Target performa">
+    <strong>Target performa:</strong> total waktu end-to-end < 15 detik untuk klip audio 5–10 detik — transkripsi beam_size=5, terjemahan direct pipeline tanpa beam search.
+  </div>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 6</span></div>
+</section>
+
+<!-- ============ PAGE 7 · API REFERENSI ============ -->
+<section class="page" aria-labelledby="api-title">
+  <div class="sec-head">
+    <div class="sec-num" aria-hidden="true">06</div>
+    <div>
+      <h2 id="api-title">Referensi API</h2>
+      <p>Tiga endpoint REST pada backend FastAPI</p>
+    </div>
+  </div>
+
+  <div class="api" role="region" aria-labelledby="api-transcribe-title">
+    <div class="api-head">
+      <span class="method m-post" aria-label="POST method">POST</span>
+      <span class="path" id="api-transcribe-title">/api/transcribe</span>
+    </div>
+    <div class="api-body">
+      <p>Mentranskripsi file audio menjadi teks menggunakan faster-whisper. Menerima file audio via multipart/form-data.</p>
+      <div class="io"><b>Request:</b> multipart/form-data — field <code>audio</code> (audio/webm, audio/wav, audio/mp3, audio/ogg)</div>
+      <div class="io"><b>Response 200:</b> <code>{ "original_text": "string", "detected_language": "id" | "en" }</code></div>
+      <div class="io"><b>Error 400:</b> <code>{ "detail": "File audio tidak valid atau kosong" }</code></div>
+      <div class="io"><b>Error 500:</b> <code>{ "detail": "Kesalahan internal server" }</code></div>
+    </div>
+  </div>
+
+  <h4>Contoh <code>curl</code></h4>
+  <pre><code class="language-bash"><span class="cmt"># Transkripsi file audio (webm/mp3/wav)</span>
+<span class="cmd">curl</span> -X POST http://localhost:8008/api/transcribe \
+  -F <span class="str">"audio=@recording.webm"</span> \
+  -H <span class="str">"Accept: application/json"</span>
+
+<span class="cmt"># Contoh response sukses</span>
+<span class="str">{
+  "original_text": "Halo, apa kabar?",
+  "detected_language": "id"
+}</span></code></pre>
+
+  <div class="api" role="region" aria-labelledby="api-translate-title">
+    <div class="api-head">
+      <span class="method m-post" aria-label="POST method">POST</span>
+      <span class="path" id="api-translate-title">/api/translate</span>
+    </div>
+    <div class="api-body">
+      <p>Menerjemahkan teks antara Bahasa Indonesia dan Bahasa Inggris menggunakan MarianMT.</p>
+      <div class="io"><b>Request:</b> application/json — <code>{ "text": "string", "source_lang": "id"|"en", "target_lang": "id"|"en" }</code></div>
+      <div class="io"><b>Response 200:</b> <code>{ "translated_text": "string" }</code></div>
+      <div class="io"><b>Error 400:</b> <code>{ "detail": "Pasangan bahasa tidak didukung" }</code></div>
+      <div class="io"><b>Error 500:</b> <code>{ "detail": "Kesalahan internal server" }</code></div>
+    </div>
+  </div>
+
+  <h4>Contoh <code>curl</code></h4>
+  <pre><code class="language-bash"><span class="cmt"># Terjemahkan Indonesia → Inggris</span>
+<span class="cmd">curl</span> -X POST http://localhost:8008/api/translate \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"text": "Halo dunia", "source_lang": "id", "target_lang": "en"}'</span>
+
+<span class="cmt"># Terjemahkan Inggris → Indonesia</span>
+<span class="cmd">curl</span> -X POST http://localhost:8008/api/translate \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"text": "Hello world", "source_lang": "en", "target_lang": "id"}'</span>
+
+<span class="cmt"># Contoh response sukses</span>
+<span class="str">{
+  "translated_text": "Hello world"
+}</span></code></pre>
+
+  <div class="api" role="region" aria-labelledby="api-health-title">
+    <div class="api-head">
+      <span class="method m-get" aria-label="GET method">GET</span>
+      <span class="path" id="api-health-title">/health</span>
+    </div>
+    <div class="api-body">
+      <p>Health check untuk memantau kesiapan layanan — dipakai juga oleh Docker healthcheck pada mode produksi.</p>
+      <div class="io"><b>Response 200:</b> <code>{ "status": "ok" }</code></div>
+    </div>
+  </div>
+
+  <h4>Contoh <code>curl</code></h4>
+  <pre><code class="language-bash"><span class="cmd">curl</span> http://localhost:8008/health
+<span class="cmt"># {"status": "ok"}</span></code></pre>
+
+  <div class="callout info" role="note" aria-label="Catatan port">
+    <strong>Catatan port:</strong> pada lingkungan development backend di-expose di port <code>8008</code> (internal kontainer 8000); frontend produksi mengakses API melalui path relatif via reverse proxy nginx.
+  </div>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 7</span></div>
+</section>
+
+<!-- ============ PAGE 8 · KONFIGURASI & CARA MENJALANKAN ============ -->
+<section class="page" aria-labelledby="config-title">
+  <div class="sec-head">
+    <div class="sec-num" aria-hidden="true">07</div>
+    <div>
+      <h2 id="config-title">Konfigurasi & Cara Menjalankan</h2>
+      <p>Persyaratan: Docker & Docker Compose terpasang</p>
+    </div>
+  </div>
+
+  <h3>Variabel Lingkungan (.env)</h3>
+  <div class="config-grid" role="list" aria-label="Konfigurasi environment variables">
+    <div class="config-card" role="listitem">
+      <h5>🔑 HF_TOKEN</h5>
+      <div class="kv"><span>Deskripsi</span><span>Token HuggingFace (opsional, untuk model private/rate limit)</span></div>
+      <div class="kv"><span>Default</span><span>(kosong)</span></div>
+      <div class="kv"><span>Contoh</span><span>hf_xxxxxxxxxxxxxxxx</span></div>
+    </div>
+    <div class="config-card" role="listitem">
+      <h5>🔧 BACKEND_PORT</h5>
+      <div class="kv"><span>Deskripsi</span><span>Port eksternal backend</span></div>
+      <div class="kv"><span>Default</span><span>8008</span></div>
+      <div class="kv"><span>Internal</span><span>8000</span></div>
+    </div>
+    <div class="config-card" role="listitem">
+      <h5>🌐 FRONTEND_PORT</h5>
+      <div class="kv"><span>Deskripsi</span><span>Port eksternal frontend</span></div>
+      <div class="kv"><span>Default</span><span>3005</span></div>
+      <div class="kv"><span>Internal</span><span>3005</span></div>
+    </div>
+    <div class="config-card" role="listitem">
+      <h5>📦 MODEL_CACHE_PATH</h5>
+      <div class="kv"><span>Deskripsi</span><span>Path volume cache model</span></div>
+      <div class="kv"><span>Default</span><span>/root/.cache/huggingface</span></div>
+      <div class="kv"><span>Volume</span><span>model_cache</span></div>
+    </div>
+  </div>
+
+  <h3>Mode Development</h3>
+  <pre><code class="language-bash"><span class="cmt"># 1. (Opsional) Salin .env.example ke .env dan isi HF_TOKEN jika perlu</span>
+<span class="cmd">cp</span> .env.example .env
+
+<span class="cmt"># 2. Bangun & jalankan kedua kontainer</span>
+<span class="cmd">docker-compose up --build</span>
+
+<span class="cmt"># 3. Akses aplikasi</span>
+<span class="cmt"># Frontend  → http://localhost:3005</span>
+<span class="cmt"># Backend   → http://localhost:8008/health</span>
+<span class="cmt"># API docs  → http://localhost:8008/docs</span></code></pre>
+
+  <h3>Mode Produksi</h3>
+  <pre><code class="language-bash"><span class="cmt"># Image produksi: frontend dibangun (nginx),</span>
+<span class="cmt"># backend dengan healthcheck & restart policy</span>
+<span class="cmd">docker-compose -f docker-compose.prod.yml up --build -d</span>
+
+<span class="cmt"># Cek status</span>
+<span class="cmd">docker-compose -f docker-compose.prod.yml ps</span>
+<span class="cmd">docker-compose -f docker-compose.prod.yml logs -f backend</span></code></pre>
+
+  <h3>Yang Terjadi Saat Pertama Kali Dijalankan</h3>
+  <ul class="list" role="list">
+    <li>Kontainer backend mengunduh model Whisper tiny dan kedua model MarianMT dari HuggingFace (butuh koneksi internet <em>sekali ini saja</em>).</li>
+    <li>Model disimpan di Docker volume <code>model_cache</code> — jalankan ulang berikutnya sepenuhnya offline dan lebih cepat.</li>
+    <li>Unduhan total ~200 MB; waktu tergantung kecepatan jaringan.</li>
+  </ul>
+
+  <h3>Struktur Direktori Proyek</h3>
+  <pre><code class="language-text"><span class="cmt">voice_translator/</span>
+<span class="fn">├── backend/</span>
+<span class="fn">│   ├── main.py              # FastAPI app, endpoints, CORS</span>
+<span class="fn">│   ├── services/</span>
+<span class="fn">│   │   ├── __init__.py</span>
+<span class="fn">│   │   ├── stt.py           # Speech-to-Text (faster-whisper)</span>
+<span class="fn">│   │   └── translation.py   # Translation (MarianMT)</span>
+<span class="fn">│   ├── models/</span>
+<span class="fn">│   │   └── schemas.py       # Pydantic request/response</span>
+<span class="fn">│   ├── utils/</span>
+<span class="fn">│   │   └── device.py        # GPU/CPU auto-detection</span>
+<span class="fn">│   ├── tests/               # Pytest suite</span>
+<span class="fn">│   ├── Dockerfile</span>
+<span class="fn">│   └── requirements.txt</span>
+<span class="fn">├── frontend/</span>
+<span class="fn">│   ├── src/</span>
+<span class="fn">│   │   ├── App.jsx          # Main component</span>
+<span class="fn">│   │   ├── main.jsx         # Entry point</span>
+<span class="fn">│   │   └── index.css        # Tailwind imports</span>
+<span class="fn">│   ├── index.html</span>
+<span class="fn">│   ├── package.json</span>
+<span class="fn">│   ├── vite.config.js       # Proxy /api → backend</span>
+<span class="fn">│   ├── tailwind.config.js</span>
+<span class="fn">│   └── postcss.config.js</span>
+<span class="fn">├── docker-compose.yml</span>
+<span class="fn">├── docker-compose.prod.yml</span>
+<span class="fn">└── .env.example</span></code></pre>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 8</span></div>
+</section>
+
+<!-- ============ PAGE 9 · PEMecAHAN MASALAH ============ -->
+<section class="page" aria-labelledby="troubleshoot-title">
+  <div class="sec-head">
+    <div class="sec-num" aria-hidden="true">08</div>
+    <div>
+      <h2 id="troubleshoot-title">Pemecahan Masalah Umum</h2>
+      <p>Diagnosis cepat dan solusi untuk kendala yang sering ditemui</p>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th style="width:35%">Gejala</th><th style="width:30%">Penyebab Kemungkinan</th><th>Solusi</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Mikrofon tidak terdeteksi / izin ditolak</b></td>
+        <td>Browser memblokir akses mikrofon; bukan konteks aman (bukan localhost/https)</td>
+        <td>Berikan izin mikrofon pada browser; pastikan mengakses via <code>localhost</code> (konteks aman). Di Chrome: 🔒 → Site settings → Microphone → Allow.</td>
+      </tr>
+      <tr>
+        <td><b>Health check gagal / stuck saat startup</b></td>
+        <td>Model belum selesai diunduh; koneksi internet lambat; kekurangan memori</td>
+        <td>Tunggu unduhan model pertama selesai; cek log <code>docker-compose logs -f backend</code>; pastikan RAM >= 4 GB.</td>
+      </tr>
+      <tr>
+        <td><b>Port bentrok (3005 / 8008 sudah dipakai)</b></td>
+        <td>Proses lain menggunakan port yang sama</td>
+        <td>Ubah mapping port di <code>docker-compose.yml</code> (mis. <code>3006:3005</code>, <code>8009:8000</code>) atau hentikan proses yang bentrok.</td>
+      </tr>
+      <tr>
+        <td><b>Transkripsi kosong / "No speech detected"</b></td>
+        <td>Audio terlalu pendek (<0.5s), terlalu bising, atau format tidak didukung</td>
+        <td>Bicara lebih jelas & minimal 1-2 detik; periksa level mikrofon; coba format WAV.</td>
+      </tr>
+      <tr>
+        <td><b>Terjemahan salah arah / bahasa tidak sesuai</b></td>
+        <td>Mode toggle tidak sinkron dengan bahasa terdeteksi Whisper</td>
+        <td>Pastikan sakelar mode (ID→EN / EN→ID) sesuai bahasa yang Anda bicarakan; Whisper mendeteksi otomatis tapi terjemahan mengikuti mode UI.</td>
+      </tr>
+      <tr>
+        <td><b>Latensi tinggi (>30 detik)</b></td>
+        <td>CPU terbatas, tidak ada GPU, model besar, atau thermal throttling</td>
+        <td>Gunakan GPU jika tersedia (CUDA + float16); tutup aplikasi berat lain; pertimbangkan model <code>tiny</code> (default).</td>
+      </tr>
+      <tr>
+        <td><b>Frontend tidak bisa konek ke backend (CORS / network error)</b></td>
+        <td>Vite proxy tidak aktif; backend belum siap; akses via IP bukan localhost</td>
+        <td>Pastikan <code>vite.config.js</code> proxy <code>/api</code> → <code>http://backend:8000</code>; akses frontend via <code>localhost:3005</code> bukan IP LAN.</td>
+      </tr>
+      <tr>
+        <td><b>Error "CUDA out of memory"</b></td>
+        <td>VRAM GPU tidak cukup untuk model</td>
+        <td>Set <code>device=cpu</code> atau <code>compute_type=int8</code> di <code>utils/device.py</code>; atau gunakan model <code>tiny</code>.</td>
+      </tr>
+      <tr>
+        <td><b>Model MarianMT tidak ditemukan / download gagal</b></td>
+        <td>Koneksi ke HuggingFace terblokir; HF_TOKEN diperlukan</td>
+        <td>Set <code>HF_TOKEN</code> di <code>.env</code>; cek firewall/proxy; model di-cache setelah berhasil sekali.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Log & Debugging</h3>
+  <pre><code class="language-bash"><span class="cmt"># Lihat log backend (termasuk progress download model)</span>
+<span class="cmd">docker-compose logs -f backend</span>
+
+<span class="cmt"># Lihat log frontend</span>
+<span class="cmd">docker-compose logs -f frontend</span>
+
+<span class="cmt"># Masuk ke kontainer backend untuk debugging manual</span>
+<span class="cmd">docker-compose exec backend bash</span>
+
+<span class="cmt"># Test endpoint langsung dari dalam kontainer</span>
+<span class="cmd">curl http://localhost:8000/health</span>
+
+<span class="cmt"># Cek cache model</span>
+<span class="cmd">docker-compose exec backend ls -la /root/.cache/huggingface/</span></code></pre>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 9</span></div>
+</section>
+
+<!-- ============ PAGE 10 · KEAMANAN & PRIVASI ============ -->
+<section class="page" aria-labelledby="security-title">
+  <div class="sec-head">
+    <div class="sec-num" aria-hidden="true">09</div>
+    <div>
+      <h2 id="security-title">Model Keamanan & Privasi</h2>
+      <p>Desain privat secara default, tanpa kompromi</p>
+    </div>
+  </div>
+
+  <div class="callout privacy" role="note" aria-label="Prinsip privasi">
+    <strong>🔒 Prinsip: Data Anda tidak pernah meninggalkan mesin Anda.</strong> Voice Translator dirancang dari awal untuk berjalan 100% offline setelah setup awal. Tidak ada telemetri, tidak ada analytics, tidak ada panggilan ke API eksternal saat runtime.
+  </div>
+
+  <h3>Aliran Data</h3>
+  <ul class="list" role="list">
+    <li><strong>Audio input</strong> → tertangkap browser → dikirim ke backend <strong>lokal</strong> via HTTP pada <code>localhost</code> → diproses → dihapus.</li>
+    <li><strong>Teks transkrip & terjemahan</strong> → hanya ada di memori browser & backend sementara → ditampilkan ke UI → tidak disimpan ke disk/database.</li>
+    <li><strong>Model AI</strong> → diunduh <strong>sekali</strong> dari HuggingFace saat pertama run → disimpan di volume Docker lokal → digunakan offline selamanya.</li>
+  </ul>
+
+  <h3>Surface Area Keamanan</h3>
+  <table>
+    <thead>
+      <tr><th style="width:30%">Komponen</th><th style="width:35%">Risiko</th><th>Mitigasi</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Microphone API</td><td>Akses audio perangkat</td><td>Hanya aktif saat tombol ditekan; indikator visual browser; konteks aman (localhost) wajib.</td></tr>
+      <tr><td>Network (localhost)</td><td>Traffic HTTP lokal</td><td>Hanya bind ke <code>127.0.0.1</code>; tidak expose ke LAN kecuali dikonfigurasi manual.</td></tr>
+      <tr><td>Docker Volume</td><td>Penyimpanan model</td><td>Hanya berisi file model read-only; tidak ada data user.</td></tr>
+      <tr><td>File temporer audio</td><td>Sisa file di disk</td><td>Dihapus otomatis di block <code>finally</code> setelah transkripsi selesai.</td></tr>
+      <tr><td>Dependencies</td><td>Supply chain attack</td><td>Pin versi di <code>requirements.txt</code> & <code>package-lock.json</code>; audit berkala.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Checklist Hardening (Produksi)</h3>
+  <ul class="list" role="list">
+    <li>Gunakan <code>docker-compose.prod.yml</code> (nginx + healthcheck + restart policy).</li>
+    <li>Batasi akses jaringan: jangan publish port 8008 ke interface publik; gunakan reverse proxy dengan TLS.</li>
+    <li>Set <code>HF_TOKEN</code> hanya jika diperlukan; jangan commit ke repo.</li>
+    <li>Jalankan kontainer sebagai non-root (sudah default di python:3.10-slim).</li>
+    <li>Audit dependensi: <code>pip-audit</code> / <code>npm audit</code> berkala.</li>
+  </ul>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 10</span></div>
+</section>
+
+<!-- ============ PAGE 11 · STRATEGI PENGUJIAN ============ -->
+<section class="page" aria-labelledby="testing-title">
+  <div class="sec-head">
+    <div class="sec-num" aria-hidden="true">10</div>
+    <div>
+      <h2 id="testing-title">Strategi Pengujian</h2>
+      <p>Unit, integrasi, dan end-to-end — memastikan keandalan</p>
+    </div>
+  </div>
+
+  <h3>Piramida Pengujian</h3>
+  <div class="metric-grid" role="list" aria-label="Piramida pengujian">
+    <div class="metric" role="listitem"><b>~70%</b><span>Unit Tests<br>(pytest / vitest)</span></div>
+    <div class="metric" role="listitem"><b>~20%</b><span>Integration Tests<br>(API contract, service mock)</span></div>
+    <div class="metric" role="listitem"><b>~10%</b><span>E2E Tests<br>(Playwright full flow)</span></div>
+    <div class="metric" role="listitem"><b>Manual</b><span>Smoke test<br>setiap release</span></div>
+  </div>
+
+  <h3>Backend (pytest)</h3>
+  <table>
+    <thead>
+      <tr><th>File</th><th>Cakupan</th><th>Strategi</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>tests/test_device.py</code></td><td>Device detection</td><td>Assert tuple (cuda/cpu, float16/int8)</td></tr>
+      <tr><td><code>tests/test_schemas.py</code></td><td>Pydantic models</td><td>Validasi field, tipe, default</td></tr>
+      <tr><td><code>tests/test_stt.py</code></td><td>STTService singleton, transcribe</td><td>Mock <code>WhisperModel</code>, verifikasi output</td></tr>
+      <tr><td><code>tests/test_translation.py</code></td><td>TranslationService singleton, cache</td><td>Mock <code>pipeline</code>, verifikasi model ID</td></tr>
+      <tr><td><code>tests/test_main.py</code></td><td>Endpoint /health, /transcribe, /translate</td><td><code>TestClient</code>, mock services, cek cleanup file</td></tr>
+      <tr><td><code>tests/test_requirements.py</code></td><td>Dependencies</td><td>Validasi package wajib ada</td></tr>
+    </tbody>
+  </table>
+
+  <pre><code class="language-bash"><span class="cmt"># Jalankan semua test backend</span>
+<span class="cmd">cd</span> backend && <span class="cmd">pytest</span> -v
+
+<span class="cmt"># Dengan coverage</span>
+<span class="cmd">pytest</span> --cov=services --cov=models --cov=utils -v</code></pre>
+
+  <h3>Frontend (Vitest + Playwright)</h3>
+  <table>
+    <thead>
+      <tr><th>File</th><th>Cakupan</th><th>Strategi</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>src/__tests__/App.test.jsx</code></td><td>Komponen utama</td><td>Render, state tombol, panel teks</td></tr>
+      <tr><td><code>src/__tests__/api.test.js</code></td><td>Fungsi API client</td><td>Mock fetch, verifikasi payload/response</td></tr>
+      <tr><td><code>e2e/record-translate.spec.ts</code></td><td>Alur penuh rekam-terjemah</td><td>Playwright: izin mikrofon, rekam, cek teks</td></tr>
+    </tbody>
+  </table>
+
+  <pre><code class="language-bash"><span class="cmt"># Unit & integration (Vitest)</span>
+<span class="cmd">cd</span> frontend && <span class="cmd">npm</span> run test
+
+<span class="cmt"># E2E (Playwright) — butuh dev server running</span>
+<span class="cmd">npm</span> run dev & <span class="cmd">npx</span> playwright test</code></pre>
+
+  <h3>CI/CD Pipeline (Rekomendasi)</h3>
+  <ul class="list" role="list">
+    <li><code>lint</code> → <code>typecheck</code> → <code>unit</code> → <code>integration</code> → <code>build</code> → <code>e2e</code> (staging) → <code>deploy</code></li>
+    <li>Gunakan GitHub Actions / GitLab CI dengan cache Docker layer & model cache.</li>
+    <li>E2E dijalankan terhadap staging environment, bukan production.</li>
+  </ul>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 11</span></div>
+</section>
+
+<!-- ============ PAGE 12 · ROADMAP & CHANGELOG ============ -->
+<section class="page" aria-labelledby="roadmap-title">
+  <div class="sec-head">
+    <div class="sec-num" aria-hidden="true">11</div>
+    <div>
+      <h2 id="roadmap-title">Roadmap & Changelog</h2>
+      <p>Rencana pengembangan pasca-MVP dan riwayat rilis</p>
+    </div>
+  </div>
+
+  <h3>Roadmap</h3>
+  <ul class="roadmap-list" role="list" aria-label="Roadmap pengembangan">
+    <li>
+      <span class="badge badge-medium rm-priority" aria-label="Prioritas Medium">Medium</span>
+      <div>
+        <h5>Web Worker untuk Pemrosesan AI</h5>
+        <p>Pindahkan pemanggilan API transcribe/translate ke Web Worker agar UI utama tidak beku selama inferensi lama. Butuh refactor <code>App.jsx</code> & <code>api.js</code>.</p>
+      </div>
+    </li>
+    <li>
+      <span class="badge badge-medium rm-priority" aria-label="Prioritas Medium">Medium</span>
+      <div>
+        <h5>Strategi Caching Model Lebih Cepat</h5>
+        <p>Pre-warm model saat container start (background), gunakan <code>ctranslate2</code> converter untuk format optimal, evaluasi <code>distil-whisper</code> untuk latency lebih rendah.</p>
+      </div>
+    </li>
+    <li>
+      <span class="badge badge-low rm-priority" aria-label="Prioritas Low">Low</span>
+      <div>
+        <h5>Pasangan Bahasa Tambahan</h5>
+        <p>Tambah model MarianMT untuk Jawa, Korea, Mandarin, Jepang, dll. Butuh update UI toggle & backend pipeline cache.</p>
+      </div>
+    </li>
+    <li>
+      <span class="badge badge-low rm-priority" aria-label="Prioritas Low">Low</span>
+      <div>
+        <h5>Pemrosesan Batch File Audio Panjang</h5>
+        <p>Upload file <code>.wav/.mp3</code> panjang → chunking otomatis (VAD) → transkripsi berurutan → gabung hasil.</p>
+      </div>
+    </li>
+    <li>
+      <span class="badge badge-low rm-priority" aria-label="Prioritas Low">Low</span>
+      <div>
+        <h5>Putar Ulang Audio (TTS)</h5>
+        <p>Integrasi <code>piper-tts</code> atau <code>coqui-tts</code> untuk speech output hasil terjemahan (text-to-speech).</p>
+      </div>
+    </li>
+    <li>
+      <span class="badge badge-low rm-priority" aria-label="Prioritas Low">Low</span>
+      <div>
+        <h5>Pilihan Ukuran Model via UI</h5>
+        <p>Dropdown: tiny / base / small / medium (Whisper) dengan trade-off kecepatan vs akurasi.</p>
+      </div>
+    </li>
+    <li>
+      <span class="badge badge-low rm-priority" aria-label="Prioritas Low">Low</span>
+      <div>
+        <h5>Autentikasi & Riwayat (Optional)</h5>
+        <jika diminta: auth ringan (magic link / passwordless) + SQLite untuk history; tetap lokal, optional.</p>
+      </div>
+    </li>
+  </ul>
+
+  <h3>Changelog v1.0 (Agustus 2026)</h3>
+  <ul class="changelog" role="list" aria-label="Changelog versi 1.0">
+    <li>
+      <div class="cl-date">2026-08-22</div>
+      <div class="cl-title">Rilis MVP v1.0</div>
+      <div class="cl-desc">Implementasi lengkap: STT (faster-whisper tiny), MT (MarianMT ID⇄EN), Frontend React hold-to-talk, Docker Compose dev/prod, test suite pytest+vitest+playwright.</div>
+    </li>
+    <li>
+      <div class="cl-date">2026-08-20</div>
+      <div class="cl-title">Desain & Spesifikasi Teknis</div>
+      <div class="cl-desc">Finalisasi arsitektur, skema API, struktur folder, keputusan model & device detection. Dokumentasi desain di <code>docs/superpowers/specs/</code>.</div>
+    </li>
+    <li>
+      <div class="cl-date">2026-08-18</div>
+      <div class="cl-title">Proof-of-Concept Inisial</div>
+      <div class="cl-desc">Eksperimen faster-whisper + MarianMT di CPU, validasi latensi <15dtk end-to-end, pilih tiny int8 sebagai default.</div>
+    </li>
+  </ul>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek</span><span>Halaman 12</span></div>
+</section>
+
+<!-- ============ PAGE 13 · LISANSI & KONTRIBUSI ============ -->
+<section class="page" aria-labelledby="license-title">
+  <div class="sec-head">
+    <div class="sec-num" aria-hidden="true">12</div>
+    <div>
+      <h2 id="license-title">Lisensi, Kontribusi & Glosarium</h2>
+      <p>Informasi hukum, panduan kontribusi, dan istilah teknis</p>
+    </div>
+  </div>
+
+  <h3>Lisensi</h3>
+  <p class="body">Voice Translator dirilis di bawah lisensi <strong>MIT License</strong> — bebas digunakan, dimodifikasi, dan didistribusikan untuk tujuan komersial maupun non-komersial, dengan mempertahankan hak cipta dan notifikasi lisensi.</p>
+  <p class="body">Model AI yang digunakan:</p>
+  <ul class="list" role="list">
+    <li><strong>faster-whisper (tiny)</strong> — berbasis Whisper OpenAI, lisensi MIT; model weights CC-BY-NC 4.0 (non-komersial) — gunakan model <code>tiny</code> yang dikonversi CTranslate2.</li>
+    <li><strong>Helsinki-NLP/opus-mt-id-en & opus-mt-en-id</strong> — lisensi Apache-2.0 (model & kode).</li>
+  </ul>
+  <div class="callout warning" role="alert" aria-label="Peringatan lisensi model">
+    <strong>⚠️ Perhatian:</strong> Weight model Whisper asli (OpenAI) memiliki klausul non-komersial. Variasi <code>faster-whisper</code> menggunakan model yang dikonversi CTranslate2; untuk penggunaan komersial, pertimbangkan model alternatif seperti <code>distil-whisper</code> atau model ASR sepenuhnya open-source (mis. <code>whisper.cpp</code> dengan model public domain).
+  </div>
+
+  <h3>Kontribusi</h3>
+  <p class="body">Kontribusi dipersilakan! Ikuti alur berikut:</p>
+  <ol style="margin: 3mm 0 3mm 8mm; padding-left: 18px;">
+    <li>Fork repositori & buat branch fitur: <code>git checkout -b feat/nama-fitur</code></li>
+    <li>Tulis test terlebih dahulu (TDD) — unit test untuk logika baru.</li>
+    <li>Implementasi minimal, pastikan <code>pytest</code> & <code>npm test</code> lolos.</li>
+    <li>Jalankan linter: <code>ruff check backend</code> / <code>npm run lint</code> (frontend).</li>
+    <li>Commit dengan pesan konvensional: <code>feat: tambah dukungan bahasa XX</code></li>
+    <li>Buat Pull Request ke <code>main</code> dengan deskripsi jelas & screenshot jika UI berubah.</li>
+  </ol>
+  <p class="body">Area kontribusi yang dibutuhkan: model bahasa baru, optimasi latency, aksesibilitas (WCAG 2.1 AA), dokumentasi bahasa lain, packaging (Homebrew, Scoop, AUR).</p>
+
+  <h3>Glosarium</h3>
+  <dl class="glossary" role="list" aria-label="Glosarium istilah teknis">
+    <dt>STT (Speech-to-Text)</dt>
+    <dd>Teknologi mengubah sinyal audio suara menjadi teks tertulis. Di proyek ini: faster-whisper.</dd>
+    <dt>MT (Machine Translation)</dt>
+    <dd>Terjemahan otomatis teks dari bahasa sumber ke target. Di proyek ini: MarianMT (Helsinki-NLP).</dd>
+    <dt>faster-whisper</dt>
+    <dd>Implementasi CTranslate2 dari Whisper OpenAI — 4-5x lebih cepat, memori lebih rendah, kompatibel CPU/GPU.</dd>
+    <dt>MarianMT</dt>
+    <dd>Framework Neural Machine Translation efisien dari Helsingin yliopisto; model Opus-MT terlatih pada data OPUS.</dd>
+    <dt>CTranslate2</dt>
+    <dd>Engine inferensi Transformer cepat (INT8, FP16) untuk CPU/GPU; digunakan faster-whisper & MarianMT.</dd>
+    <dt>Beam Search</dt>
+    <dd>Algoritma decoding yang menjelajahi multiple hipotesis; <code>beam_size=5</code> berarti 5 jalur paralel.</dd>
+    <dt>INT8 Quantization</dt>
+    <dd>Kompresi bobot model dari FP32 ke INT8 (8-bit) — ukuran 4x lebih kecil, inferensi 2-4x lebih cepat di CPU.</dd>
+    <dt>Docker Volume</dt>
+    <dd>Mekanisme penyimpanan persisten terkelola Docker; data bertahan setelah kontainer dihapus.</dd>
+    <dt>Hold-to-Talk</dt>
+    <dd>Pola UX: tekan tahan untuk merekam, lepaskan untuk memproses — mencegah rekaman tidak sengaja.</dd>
+    <dt>VAD (Voice Activity Detection)</dt>
+    <dd>Deteksi keberadaan suara dalam audio; digunakan untuk chunking/segmentasi otomatis.</dd>
+    <dt>TTS (Text-to-Speech)</dt>
+    <dd>Sintesis suara dari teks; rencana masa depan untuk output audio terjemahan.</dd>
+  </dl>
+
+  <div class="footer"><span>Voice Translator · Dokumentasi Proyek · v1.0 · Agustus 2026</span><span>Halaman 13</span></div>
+</section>
+
+</body>
+</html>

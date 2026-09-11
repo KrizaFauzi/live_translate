@@ -1,3 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: #0D9488;
+    --color-primary-foreground: #000000;
+    --color-secondary: #14B8A6;
+    --color-secondary-foreground: #0F172A;
+    --color-accent: #EA580C;
+    --color-accent-foreground: #000000;
+    --color-background: #F0FDFA;
+    --color-foreground: #134E4A;
+    --color-card: #FFFFFF;
+    --color-card-foreground: #134E4A;
+    --color-muted: #E8F1F4;
+    --color-muted-foreground: #475569;
+    --color-border: #99F6E4;
+    --color-destructive: #DC2626;
+    --color-destructive-foreground: #FFFFFF;
+    --color-ring: #0D9488;
+  }
+
+  .dark {
+    --color-primary: #14B8A6;
+    --color-primary-foreground: #0F172A;
+    --color-secondary: #0D9488;
+    --color-secondary-foreground: #F0FDFA;
+    --color-accent: #F97316;
+    --color-accent-foreground: #000000;
+    --color-background: #0F172A;
+    --color-foreground: #F0FDFA;
+    --color-card: #1E293B;
+    --color-card-foreground: #F0FDFA;
+    --color-muted: #1E293B;
+    --color-muted-foreground: #94A3B8;
+    --color-border: #0D9488;
+    --color-destructive: #EF4444;
+    --color-destructive-foreground: #000000;
+    --color-ring: #14B8A6;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80;
+  }
+
+  .btn-secondary {
+    @apply btn bg-secondary text-secondary-foreground hover:bg-secondary/90 active:bg-secondary/80;
+  }
+
+  .btn-outline {
+    @apply btn border border-border bg-transparent hover:bg-muted active:bg-muted/50;
+  }
+
+  .btn-ghost {
+    @apply btn bg-transparent hover:bg-muted active:bg-muted/50;
+  }
+
+  .btn-destructive {
+    @apply btn bg-destructive text-destructive-foreground hover:bg-destructive/90 active:bg-destructive/80;
+  }
+
+  .card {
+    @apply bg-card text-card-foreground rounded-xl border border-border shadow-sm;
+  }
+
+  .input {
+    @apply flex h-10 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .label {
+    @apply text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
