@@ -5,6 +5,14 @@ node_modules/
 dist/
 .omo/
 .opencode/
+/.agents/
+/.codex/
+/.superpowers/
+/docs/superpowers/
+/.claude/
+/.cursor/
+/.continue/
+/.aider*
 ~/
 .env
 .env.*
